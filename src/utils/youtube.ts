@@ -1,3 +1,13 @@
+interface Channel {
+  id: string;
+  name: string;
+  handle?: string;
+  avatar: string;
+  subscribers: number;
+}
+
+export type { Channel as YouTubeChannel };
+
 export async function getChannel(id: string) {
   const res = await fetch(
     `https://yt.lemnoslife.com/noKey/channels?id=${id}&part=snippet,statistics`,
@@ -8,15 +18,7 @@ export async function getChannel(id: string) {
   return formatItem(data.items[0]);
 }
 
-export async function getChannels(ids: string[]): Promise<
-  {
-    id: string;
-    name: string;
-    handle?: string;
-    avatar: string;
-    subscribers: number;
-  }[]
-> {
+export async function getChannels(ids: string[]): Promise<Channel[]> {
   const res = await fetch(
     `https://yt.lemnoslife.com/noKey/channels?id=${ids.join(",")}&part=snippet,statistics`,
   );
@@ -28,15 +30,7 @@ export async function getChannels(ids: string[]): Promise<
   return [...data.items.map(formatItem)];
 }
 
-const formatItem = (
-  item: any,
-): {
-  id: string;
-  name: string;
-  handle?: string;
-  avatar: string;
-  subscribers: number;
-} => ({
+const formatItem = (item: any): Channel => ({
   id: item.id,
   name: item.snippet.title,
   handle: item.snippet.customUrl,

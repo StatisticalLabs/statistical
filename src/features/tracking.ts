@@ -4,6 +4,7 @@ import type { BotClient } from "../structures/client";
 import { trackers, youtubeChannels } from "../utils/db";
 import { getChannels } from "../utils/youtube";
 import { abbreviate } from "../utils/abbreviate";
+import { cache } from "../utils/cache";
 
 interface Message {
   channelId: string;
@@ -99,6 +100,7 @@ async function checkForUpdates(client: BotClient<true>) {
             duration: 0,
             subscriberRate,
           };
+          await cache.set(channel.id, JSON.stringify(channel));
 
           for (const trackerId of dbChannel.trackers) {
             const trackerData = trackers.find(

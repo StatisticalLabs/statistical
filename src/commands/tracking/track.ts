@@ -1,9 +1,10 @@
 import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import type { Command } from "../../structures/command";
 import { channelAutocomplete } from "../../utils/autocomplete";
-import { getChannel } from "../../utils/youtube";
+import { getChannel, type YouTubeChannel } from "../../utils/youtube";
 import { isTracking, subscribe } from "../../utils/db";
 import config from "../../../config";
+import { cache } from "../../utils/cache";
 
 export default {
   data: new SlashCommandBuilder()
@@ -21,7 +22,16 @@ export default {
   autocomplete: ({ interaction }) => channelAutocomplete(interaction),
   run: async ({ interaction }) => {
     const channelId = interaction.options.getString("channel", true);
-    const channel = await getChannel(channelId);
+
+    const cachedChannel = await cache.get(channelId).catch(() => null);
+    let channel = cachedChannel
+      ? ((await JSON.parse(cachedChannel)) as YouTubeChannel)
+      : null;
+    if (!channel) {
+      const channelFromYouTube = await getChannel(channelId);
+      channel = channelFromYouTube;
+    }
+
     if (!channel)
       return interaction.reply({
         embeds: [
