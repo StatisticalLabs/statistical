@@ -87,8 +87,7 @@ async function checkForUpdates(client: BotClient<true>) {
           const subscriberDifference = !dbChannel.currentUpdate?.subscribers
             ? 0
             : channel.subscribers - dbChannel.currentUpdate.subscribers;
-          const subscriberRate =
-            (subscriberDifference / (timeTook / 1000)) * (60 * 60 * 24);
+          const subscriberRate = subscriberDifference / (timeTook / 1000);
 
           dbChannel.lastUpdate = dbChannel.currentUpdate;
           dbChannel.currentUpdate = {
@@ -145,82 +144,83 @@ export default async (client: BotClient<true>) => {
     try {
       for await (const message of messagesQueue) {
         const discordChannel = client.channels.cache.get(message.channelId);
-        const title = `New subscriber update for ${message.name}${
-          message.handle ? ` (${message.handle})` : ""
-        }`;
+
+        const dailySubRate = {
+          old: (message.lastSubscriberRate || 0) * (60 * 60 * 24),
+          new: message.subscriberRate * (60 * 60 * 24),
+        };
+        const secondSubRate = message.subscriberRate * 1;
 
         if (discordChannel?.isTextBased())
           await discordChannel.send({
             embeds: [
               new EmbedBuilder()
-                .setTitle(
-                  title.length > 255
-                    ? title.substring(0, 255).concat("…")
-                    : title,
-                )
-                .setURL(
-                  `https://youtube.com/${message.handle ?? `channel/${message.channelId}`}`,
-                )
+                .setAuthor({
+                  name: `${message.name}${message.handle ? ` (${message.handle})` : ""}`,
+                  iconURL: message.avatar,
+                  url: `https://youtube.com/${message.handle ?? `channel/${message.channelId}`}`,
+                })
+                .setTitle("New subscriber update")
                 .addFields([
                   {
-                    name: "Old API Count",
+                    name: "Old subcriber count",
                     value: message.oldApiCount
                       ? abbreviate(message.oldApiCount)
                       : "None",
                     inline: true,
                   },
                   {
-                    name: "New API Count",
+                    name: "New subscriber count",
                     value: abbreviate(message.newApiCount),
                     inline: true,
                   },
                   {
-                    name: "Last Update Time",
+                    name: `${abbreviate(
+                      message.oldApiCount ?? 0,
+                    )} milestone date`,
                     value: message.lastUpdateTime
                       ? time(message.lastUpdateTime, "F")
                       : "None",
                   },
                   {
-                    name: "Current Update Time",
+                    name: `${abbreviate(message.newApiCount)} milestone date`,
                     value: time(message.currentUpdateTime, "F"),
                   },
                   {
-                    name: "Exact Time (UTC)",
-                    value: message.currentUpdateTime.toISOString(),
-                  },
-                  {
-                    name: "Time Elapsed",
+                    name: "Time elapsed",
                     value: convertToReadable(message.timeTook),
                   },
                   {
-                    name: `Subscribers per day ${
-                      message.lastSubscriberRate &&
-                      message.lastSubscriberRate !== 0
-                        ? message.subscriberRate - message.lastSubscriberRate <
-                          0
-                          ? "(⬇️)"
-                          : message.subscriberRate -
-                                message.lastSubscriberRate ===
-                              0
+                    name: `Subscribers/day ${
+                      dailySubRate.old !== 0
+                        ? dailySubRate.new - dailySubRate.old < 0
+                          ? "(⏬)"
+                          : dailySubRate.new - dailySubRate.old === 0
                             ? ""
-                            : "(⬆️)"
+                            : "(⏫)"
                         : ""
                     }`,
-                    value: `${message.subscriberRate === 0 || message.subscriberRate > 0 ? "+" : ""}${Math.floor(message.subscriberRate).toLocaleString()} (previously ${message.lastSubscriberRate ? (message.lastSubscriberRate === 0 || message.lastSubscriberRate > 0 ? "+" : "") : "+"}${Math.floor(message.lastSubscriberRate ?? 0).toLocaleString()})`,
+                    value: `${dailySubRate.new === 0 || dailySubRate.new > 0 ? "+" : ""}${Math.floor(dailySubRate.new).toLocaleString()} (previously ${dailySubRate.old ? (dailySubRate.old === 0 || dailySubRate.old > 0 ? "+" : "") : "+"}${Math.floor(dailySubRate.old ?? 0).toLocaleString()})`,
+                    inline: true,
+                  },
+                  {
+                    name: "Subscribers/second",
+                    value: `${secondSubRate === 0 || secondSubRate > 0 ? "+" : ""}${secondSubRate.toLocaleString()}`,
+                    inline: true,
                   },
                 ])
-                .setThumbnail(message.avatar)
                 .setColor(
                   message.newApiCount < (message.oldApiCount ?? 0)
                     ? config.colors.danger
-                    : message.subscriberRate < (message.lastSubscriberRate ?? 0)
+                    : dailySubRate.new < (message.lastSubscriberRate ?? 0)
                       ? config.colors.warning
                       : config.colors.success,
                 )
                 .setFooter({
                   text: client.user.username,
                   iconURL: client.user.displayAvatarURL(),
-                }),
+                })
+                .setTimestamp(),
             ],
           });
 
