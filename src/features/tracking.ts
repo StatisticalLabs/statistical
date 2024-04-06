@@ -7,6 +7,7 @@ import { abbreviate } from "../utils/abbreviate";
 
 interface Message {
   channelId: string;
+  youtubeChannelId: string;
   name: string;
   handle?: string;
   avatar: string;
@@ -112,6 +113,7 @@ async function checkForUpdates(client: BotClient<true>) {
 
             messagesQueue.add({
               channelId: trackerData.channelId,
+              youtubeChannelId: channel.id,
               name: channel.name,
               handle: channel.handle,
               avatar: channel.avatar,
@@ -161,7 +163,7 @@ export default async (client: BotClient<true>) => {
                 .setAuthor({
                   name: `${message.name}${message.handle ? ` (${message.handle})` : ""}`,
                   iconURL: message.avatar,
-                  url: `https://youtube.com/${message.handle ?? `channel/${message.channelId}`}`,
+                  url: `https://youtube.com/${message.handle ?? `channel/${message.youtubeChannelId}`}`,
                 })
                 .setTitle("New subscriber update")
                 .addFields([
