@@ -1,3 +1,4 @@
+import config from "../../config";
 import type { BotClient } from "../structures/client";
 import { trackers, youtubeChannels } from "../utils/db";
 import { getChannels } from "../utils/youtube";
@@ -68,7 +69,7 @@ async function checkForUpdates(client: BotClient<true>) {
   } catch (err) {
     console.error(err);
   } finally {
-    await Bun.sleep(1000);
+    await Bun.sleep(config.trackDelay);
     updatePossible = true;
   }
 }
@@ -77,7 +78,7 @@ export default async (client: BotClient<true>) => {
   setInterval(() => checkForUpdates(client), 1000);
   setInterval(() => {
     if (
-      performance.now() - lastTrackTime > 60_000 * 5 + 1000 &&
+      performance.now() - lastTrackTime > 60_000 * 5 + config.trackDelay &&
       updatePossible == false
     ) {
       updatePossible = true; // force save if it gets stuck
