@@ -50,6 +50,8 @@ function convertToReadable(timestamp: number) {
   return string.join(", ");
 }
 
+const sign = (num: number) => (num === 0 || num > 0 ? "+" : "");
+
 async function checkForUpdates(client: BotClient<true>) {
   if (!updatePossible) return;
 
@@ -149,6 +151,7 @@ export default async (client: BotClient<true>) => {
           old: (message.lastSubscriberRate || 0) * (60 * 60 * 24),
           new: message.subscriberRate * (60 * 60 * 24),
         };
+        const dailySubRateDifference = dailySubRate.new - dailySubRate.old;
         const secondSubRate = message.subscriberRate * 1;
 
         if (discordChannel?.isTextBased())
@@ -200,7 +203,7 @@ export default async (client: BotClient<true>) => {
                             : "(⏫)"
                         : ""
                     }`,
-                    value: `${dailySubRate.new === 0 || dailySubRate.new > 0 ? "+" : ""}${Math.floor(dailySubRate.new).toLocaleString()} (previously ${dailySubRate.old ? (dailySubRate.old === 0 || dailySubRate.old > 0 ? "+" : "") : "+"}${Math.floor(dailySubRate.old ?? 0).toLocaleString()})`,
+                    value: `${sign(dailySubRate.new)}${Math.floor(dailySubRate.new).toLocaleString()} (${sign(dailySubRateDifference)}${Math.floor(dailySubRateDifference).toLocaleString()})`,
                     inline: true,
                   },
                   {
@@ -212,7 +215,7 @@ export default async (client: BotClient<true>) => {
                 .setColor(
                   message.newApiCount < (message.oldApiCount ?? 0)
                     ? config.colors.danger
-                    : dailySubRate.new < (message.lastSubscriberRate ?? 0)
+                    : dailySubRate.new < dailySubRate.old
                       ? config.colors.warning
                       : config.colors.success,
                 )
