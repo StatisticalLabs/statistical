@@ -1,0 +1,6 @@
+{
+  "exec": "bun src/index.ts",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
