@@ -64,9 +64,17 @@ const getYouTubeChannelIndex = (id: string) =>
 const isTracking = (youtubeChannelId: string, channelId: string) =>
   trackers?.findIndex(
     (record) =>
-      record?.channelId == channelId &&
-      record?.youtubeChannelId == youtubeChannelId,
+      record?.channelId === channelId &&
+      record?.youtubeChannelId === youtubeChannelId,
   ) !== -1;
+
+function findTracker(youtubeChannelId: string, channelId: string) {
+  return trackers.find(
+    (record) =>
+      record.channelId === channelId &&
+      record.youtubeChannelId === youtubeChannelId,
+  );
+}
 
 function subscribe(options: {
   youtubeChannelId: string;
@@ -94,6 +102,26 @@ function subscribe(options: {
     userId: options.userId,
     subscribedAt: new Date().toISOString(),
   });
+}
+
+function unsubscribe(options: { youtubeChannelId: string; channelId: string }) {
+  // dont check for channel because sometimes people try to untrack banned / terminated channels which the ytAPI doesnt show.
+  if (isTracking(options.youtubeChannelId, options.channelId) == false)
+    return false;
+
+  const index = getYouTubeChannelIndex(options.youtubeChannelId);
+  if (index === -1) return false;
+  const tracker = findTracker(options.youtubeChannelId, options.channelId);
+  if (!tracker?.id) return false;
+  const trackerInChannelIndex = youtubeChannels[index].trackers.findIndex(
+    (record) => record == tracker.id,
+  );
+  const trackerIndex = trackers.findIndex((record) => record.id == tracker.id);
+  if (trackerInChannelIndex !== -1)
+    // remove the subscription
+    youtubeChannels[index].trackers.splice(trackerInChannelIndex, 1);
+  if (trackerIndex != -1) trackers.splice(trackerIndex, 1);
+  return true;
 }
 
 let updatePossible = true;
@@ -135,4 +163,5 @@ export {
   getYouTubeChannelIndex,
   isTracking,
   subscribe,
+  unsubscribe,
 };
