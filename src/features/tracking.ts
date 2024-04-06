@@ -75,4 +75,17 @@ async function checkForUpdates(client: BotClient<true>) {
 
 export default async (client: BotClient<true>) => {
   setInterval(() => checkForUpdates(client), 1000);
+  setInterval(() => {
+    if (
+      performance.now() - lastTrackTime > 60_000 * 5 + 1000 &&
+      updatePossible == false
+    ) {
+      updatePossible = true; // force save if it gets stuck
+      console.log(
+        "Tracking was locked for " +
+          Math.floor(performance.now() - lastTrackTime) +
+          "ms, so we forced it to work again.",
+      );
+    }
+  }, 10000);
 };

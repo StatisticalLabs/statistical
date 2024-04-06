@@ -1,4 +1,4 @@
-import { EmbedBuilder } from "discord.js";
+import { AutocompleteInteraction, EmbedBuilder } from "discord.js";
 import { event } from "../structures/event";
 import type { ExtendedChatInputCommandInteraction } from "../structures/command";
 
@@ -34,6 +34,18 @@ export default event("interactionCreate", async (client, interaction) => {
         ],
         ephemeral: true,
       });
+    }
+  } else if (interaction.isAutocomplete()) {
+    const command = client.commands.get(interaction.commandName);
+    if (!command || !command.autocomplete) return;
+
+    try {
+      await command.autocomplete({
+        client,
+        interaction: interaction as AutocompleteInteraction<"cached">,
+      });
+    } catch (err) {
+      console.error(err);
     }
   }
 });

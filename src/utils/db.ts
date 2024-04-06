@@ -1,4 +1,5 @@
 import { exists, mkdir, writeFile } from "fs/promises";
+import { createId } from "@paralleldrive/cuid2";
 
 export interface Meta {
   youtubeChannels: YouTubeChannel[];
@@ -23,7 +24,7 @@ export interface Tracker {
   id: string;
   youtubeChannelId: string;
   channelId: string;
-  guildId?: string;
+  guildId: string;
   userId: string;
   subscribedAt: string;
 }
@@ -54,6 +55,46 @@ const metaFile = Bun.file("data/meta.json");
 const { youtubeChannels, trackers } = (await JSON.parse(
   Buffer.from(await metaFile.arrayBuffer()).toString(),
 )) as Meta;
+
+const getYouTubeChannel = (id: string) =>
+  youtubeChannels.find((record) => record.id === id);
+const getYouTubeChannelIndex = (id: string) =>
+  youtubeChannels.findIndex((record) => record.id === id);
+
+const isTracking = (youtubeChannelId: string, channelId: string) =>
+  trackers?.findIndex(
+    (record) =>
+      record?.channelId == channelId &&
+      record?.youtubeChannelId == youtubeChannelId,
+  ) !== -1;
+
+function subscribe(options: {
+  youtubeChannelId: string;
+  channelId: string;
+  userId: string;
+  guildId: string;
+}) {
+  if (isTracking(options.youtubeChannelId, options.channelId)) return false;
+
+  const id = createId();
+
+  const channelIndex = getYouTubeChannelIndex(options.youtubeChannelId);
+  if (channelIndex === -1)
+    youtubeChannels.push({
+      id: options.youtubeChannelId,
+      trackers: [id],
+    });
+  else youtubeChannels[channelIndex].trackers.push(id);
+
+  trackers.push({
+    id,
+    youtubeChannelId: options.youtubeChannelId,
+    channelId: options.channelId,
+    guildId: options.guildId,
+    userId: options.userId,
+    subscribedAt: new Date().toISOString(),
+  });
+}
 
 let updatePossible = true;
 let lastSaveTime = 0;
@@ -87,4 +128,11 @@ setInterval(() => {
   }
 }, 10000);
 
-export { youtubeChannels, trackers };
+export {
+  youtubeChannels,
+  trackers,
+  getYouTubeChannel,
+  getYouTubeChannelIndex,
+  isTracking,
+  subscribe,
+};
