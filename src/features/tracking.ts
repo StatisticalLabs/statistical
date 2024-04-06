@@ -210,7 +210,13 @@ export default async (client: BotClient<true>) => {
                   },
                 ])
                 .setThumbnail(message.avatar)
-                .setColor("White")
+                .setColor(
+                  message.newApiCount < (message.oldApiCount ?? 0)
+                    ? config.colors.danger
+                    : message.subscriberRate < (message.lastSubscriberRate ?? 0)
+                      ? config.colors.warning
+                      : config.colors.success,
+                )
                 .setFooter({
                   text: client.user.username,
                   iconURL: client.user.displayAvatarURL(),

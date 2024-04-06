@@ -3,6 +3,7 @@ import type { Command } from "../../structures/command";
 import { channelAutocomplete } from "../../utils/autocomplete";
 import { getChannel } from "../../utils/youtube";
 import { isTracking, subscribe } from "../../utils/db";
+import config from "../../../config";
 
 export default {
   data: new SlashCommandBuilder()
@@ -27,7 +28,7 @@ export default {
           new EmbedBuilder()
             .setTitle("Error")
             .setDescription(`No channel found with ID **${channelId}**.`)
-            .setColor("Red"),
+            .setColor(config.colors.danger),
         ],
         ephemeral: true,
       });
@@ -40,7 +41,7 @@ export default {
             .setDescription(
               `**${channel.name}** is already being tracked in this channel.`,
             )
-            .setColor("Red"),
+            .setColor(config.colors.danger),
         ],
         ephemeral: true,
       });
@@ -59,7 +60,7 @@ export default {
           .setDescription(
             `Started tracking **${channel.name}** in this channel.`,
           )
-          .setColor("Green"),
+          .setColor(config.colors.success),
       ],
       ephemeral: true,
     });

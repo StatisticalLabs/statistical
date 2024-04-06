@@ -1,6 +1,7 @@
 import { AutocompleteInteraction, EmbedBuilder } from "discord.js";
 import { event } from "../structures/event";
 import type { ExtendedChatInputCommandInteraction } from "../structures/command";
+import config from "../../config";
 
 export default event("interactionCreate", async (client, interaction) => {
   if (interaction.isChatInputCommand()) {
@@ -10,7 +11,7 @@ export default event("interactionCreate", async (client, interaction) => {
           new EmbedBuilder()
             .setTitle("Error")
             .setDescription("Commands can only be used in servers.")
-            .setColor("Red"),
+            .setColor(config.colors.danger),
         ],
         ephemeral: true,
       });
@@ -30,7 +31,7 @@ export default event("interactionCreate", async (client, interaction) => {
           new EmbedBuilder()
             .setTitle("Error")
             .setDescription("An error occured while running this command.")
-            .setColor("Red"),
+            .setColor(config.colors.danger),
         ],
         ephemeral: true,
       });
