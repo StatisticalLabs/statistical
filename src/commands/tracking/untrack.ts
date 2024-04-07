@@ -38,7 +38,7 @@ export default {
         "channel",
       ) as GuildTextBasedChannel | null) ?? interaction.channel;
 
-    const channelId = interaction.options.getString("channel", true);
+    const channelId = interaction.options.getString("query", true);
 
     const cachedChannel = await cache.get(channelId).catch(() => null);
     let channel = cachedChannel
@@ -49,7 +49,7 @@ export default {
       channel = channelFromYouTube;
     }
 
-    if (!isTracking(channelId, interaction.channel.id))
+    if (!isTracking(channelId, textChannel.id))
       return interaction.reply({
         embeds: [
           new EmbedBuilder()

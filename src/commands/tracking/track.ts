@@ -60,7 +60,7 @@ export default {
         ephemeral: true,
       });
 
-    if (isTracking(channelId, interaction.channel.id))
+    if (isTracking(channelId, textChannel.id))
       return interaction.reply({
         embeds: [
           new EmbedBuilder()
@@ -77,7 +77,7 @@ export default {
       name: channel.name,
       handle: channel.handle,
       youtubeChannelId: channelId,
-      channelId: channel.id,
+      channelId: textChannel.id,
       userId: interaction.user.id,
       guildId: interaction.guild.id,
     });
