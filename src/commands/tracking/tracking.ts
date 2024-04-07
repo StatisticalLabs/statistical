@@ -6,21 +6,37 @@ import {
   ComponentType,
   EmbedBuilder,
   SlashCommandBuilder,
+  type GuildTextBasedChannel,
 } from "discord.js";
 import type { Command } from "../../structures/command";
 import { trackers, youtubeChannels, type YouTubeChannel } from "../../utils/db";
 import config from "../../../config";
 import { abbreviate } from "../../utils/abbreviate";
+import { textChannelTypes } from "../../utils/channel-types";
 
 export default {
   data: new SlashCommandBuilder()
     .setName("tracking")
     .setDescription(
       "View the list of YouTube channels currently being tracked.",
+    )
+    .addChannelOption((option) =>
+      option
+        .setName("channel")
+        .setDescription(
+          "The channel to view the list of YouTube channels being tracked.",
+        )
+        .addChannelTypes(...textChannelTypes)
+        .setRequired(false),
     ),
   run: async ({ interaction }) => {
+    const channel =
+      (interaction.options.getChannel(
+        "channel",
+      ) as GuildTextBasedChannel | null) ?? interaction.channel;
+
     const channelTrackers = trackers.filter(
-      (tracker) => tracker.channelId === interaction.channel.id,
+      (tracker) => tracker.channelId === channel.id,
     );
     if (!channelTrackers.length)
       return interaction.reply({
@@ -28,7 +44,7 @@ export default {
           new EmbedBuilder()
             .setTitle("Error")
             .setDescription(
-              "No YouTube channels are being tracked in this channel.",
+              `No YouTube channels are being tracked in ${channel.id === interaction.channel.id ? "this channel" : channel.toString()}.`,
             )
             .setColor(config.colors.danger),
         ],
@@ -54,7 +70,7 @@ export default {
       const current = chnls.slice(i, i + 10);
       embeds.push(
         new EmbedBuilder()
-          .setTitle(`Channels being tracked in #${interaction.channel.name}`)
+          .setTitle(`Channels being tracked in #${channel.name}`)
           .setDescription(
             current
               .map(

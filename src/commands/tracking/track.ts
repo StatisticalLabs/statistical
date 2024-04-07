@@ -1,10 +1,15 @@
-import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import {
+  EmbedBuilder,
+  SlashCommandBuilder,
+  type GuildTextBasedChannel,
+} from "discord.js";
 import type { Command } from "../../structures/command";
 import { channelAutocomplete } from "../../utils/autocomplete";
 import { getChannel, type YouTubeChannel } from "../../utils/youtube";
 import { isTracking, subscribe } from "../../utils/db";
 import config from "../../../config";
 import { cache } from "../../utils/cache";
+import { textChannelTypes } from "../../utils/channel-types";
 
 export default {
   data: new SlashCommandBuilder()
@@ -14,14 +19,26 @@ export default {
     )
     .addStringOption((option) =>
       option
-        .setName("channel")
+        .setName("query")
         .setDescription("The YouTube channel to track.")
         .setAutocomplete(true)
         .setRequired(true),
+    )
+    .addChannelOption((option) =>
+      option
+        .setName("channel")
+        .setDescription("The channel to send the latest updates to.")
+        .addChannelTypes(...textChannelTypes)
+        .setRequired(false),
     ),
   autocomplete: ({ interaction }) => channelAutocomplete(interaction),
   run: async ({ interaction }) => {
-    const channelId = interaction.options.getString("channel", true);
+    const textChannel =
+      (interaction.options.getChannel(
+        "channel",
+      ) as GuildTextBasedChannel | null) ?? interaction.channel;
+
+    const channelId = interaction.options.getString("query", true);
 
     const cachedChannel = await cache.get(channelId).catch(() => null);
     let channel = cachedChannel
@@ -49,7 +66,7 @@ export default {
           new EmbedBuilder()
             .setTitle("Error")
             .setDescription(
-              `**${channel.name}** is already being tracked in this channel.`,
+              `**${channel.name}** is already being tracked in ${channel.id === interaction.channel.id ? "this channel" : textChannel.toString()}.`,
             )
             .setColor(config.colors.danger),
         ],
@@ -60,7 +77,7 @@ export default {
       name: channel.name,
       handle: channel.handle,
       youtubeChannelId: channelId,
-      channelId: interaction.channel.id,
+      channelId: channel.id,
       userId: interaction.user.id,
       guildId: interaction.guild.id,
     });
@@ -70,13 +87,13 @@ export default {
         new EmbedBuilder()
           .setTitle("Success!")
           .setDescription(
-            `Started tracking **${channel.name}** in this channel.`,
+            `Started tracking **${channel.name}** in ${channel.id === interaction.channel.id ? "this channel" : textChannel.toString()}.`,
           )
           .setColor(config.colors.success),
       ],
       ephemeral: true,
     });
-    interaction.channel.send(
+    textChannel.send(
       `${interaction.user} has started tracking **${channel.name}** in this channel.`,
     );
   },
