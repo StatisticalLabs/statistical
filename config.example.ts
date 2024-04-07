@@ -12,4 +12,9 @@ export default {
     warning: "#ffa500",
     danger: "#ff5733",
   },
+  // Custom emojis used in some commands.
+  emojis: {
+    previous: "◀️",
+    next: "▶️",
+  },
 } satisfies Config;
