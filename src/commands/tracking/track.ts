@@ -57,6 +57,8 @@ export default {
       });
 
     subscribe({
+      name: channel.name,
+      handle: channel.handle,
       youtubeChannelId: channelId,
       channelId: interaction.channel.id,
       userId: interaction.user.id,

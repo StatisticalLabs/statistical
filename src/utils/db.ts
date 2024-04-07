@@ -8,6 +8,8 @@ export interface Meta {
 
 export interface YouTubeChannel {
   id: string;
+  name: string;
+  handle?: string;
   lastUpdate?: Update;
   currentUpdate?: Update;
   trackers: string[];
@@ -77,6 +79,8 @@ function findTracker(youtubeChannelId: string, channelId: string) {
 }
 
 function subscribe(options: {
+  name: string;
+  handle?: string;
   youtubeChannelId: string;
   channelId: string;
   userId: string;
@@ -90,6 +94,8 @@ function subscribe(options: {
   if (channelIndex === -1)
     youtubeChannels.push({
       id: options.youtubeChannelId,
+      name: options.name,
+      handle: options.handle,
       trackers: [id],
     });
   else youtubeChannels[channelIndex].trackers.push(id);

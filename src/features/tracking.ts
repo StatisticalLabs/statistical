@@ -93,6 +93,9 @@ async function checkForUpdates(client: BotClient<true>) {
             : channel.subscribers - dbChannel.currentUpdate.subscribers;
           const subscriberRate = subscriberDifference / (timeTook / 1000);
 
+          if (dbChannel.name !== channel.name) dbChannel.name = channel.name;
+          if (dbChannel.handle !== channel.handle)
+            dbChannel.handle = channel.handle;
           dbChannel.lastUpdate = dbChannel.currentUpdate;
           dbChannel.currentUpdate = {
             subscribers: channel.subscribers,
