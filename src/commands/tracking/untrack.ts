@@ -71,7 +71,7 @@ export default {
 
     unsubscribe({
       youtubeChannelId: channelId,
-      channelId: interaction.channel.id,
+      channelId: textChannel.id,
     });
 
     interaction.followUp({
