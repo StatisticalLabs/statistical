@@ -46,10 +46,9 @@ export const trackedChannelAutocomplete = async (
         (a.currentUpdate?.subscribers ?? 0),
     )
     .map((channel) => ({
-      name: `${channel.name}${channel.handle ? ` (${channel.handle})` : `channel/${channel.id}`}`,
+      name: `${channel.name}${channel.handle ? ` (${channel.handle})` : ""}`,
       value: channel.id,
     }));
-  console.log(channels);
   const filtered = channels.filter((channel) =>
     channel.name.includes(focusedValue),
   );

@@ -4,6 +4,9 @@ interface Channel {
   handle?: string;
   avatar: string;
   subscribers: number;
+  views: number;
+  videos: number;
+  createdAt: Date;
 }
 
 export type { Channel as YouTubeChannel };
@@ -39,4 +42,7 @@ const formatItem = (item: any): Channel => ({
     item.snippet.thumbnails.medium?.url ??
     item.snippet.thumbnails.default?.url,
   subscribers: parseInt(item.statistics.subscriberCount),
+  views: parseInt(item.statistics.viewCount),
+  videos: parseInt(item.statistics.videoCount),
+  createdAt: new Date(item.snippet.publishedAt),
 });

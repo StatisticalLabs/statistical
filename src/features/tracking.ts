@@ -5,6 +5,7 @@ import { trackers, youtubeChannels } from "../utils/db";
 import { getChannels } from "../utils/youtube";
 import { abbreviate } from "../utils/abbreviate";
 import { cache } from "../utils/cache";
+import { sign } from "../utils/sign";
 
 interface Message {
   channelId: string;
@@ -51,8 +52,6 @@ function convertToReadable(timestamp: number) {
 
   return string.join(", ");
 }
-
-const sign = (num: number) => (num === 0 || num > 0 ? "+" : "");
 
 async function checkForUpdates(client: BotClient<true>) {
   if (!updatePossible) return;
