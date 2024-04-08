@@ -72,21 +72,6 @@ export default {
               inline: true,
             },
             {
-              name: `Channels tracking ${channel.name}`,
-              value: (dbChannel?.trackers?.length ?? 0).toLocaleString(),
-            },
-            {
-              name: "Created",
-              value: time(channel.createdAt, "F"),
-            },
-            {
-              name: "Last update",
-              value:
-                dbChannel && dbChannel.currentUpdate
-                  ? time(new Date(dbChannel.currentUpdate.timeHit), "F")
-                  : "None",
-            },
-            {
               name: "Subscribers/day",
               value:
                 dbChannel && dbChannel.currentUpdate
@@ -101,6 +86,21 @@ export default {
                   ? `${gain(dbChannel.currentUpdate.subscriberRate)}`
                   : "None",
               inline: true,
+            },
+            {
+              name: `Channels tracking ${channel.name}`,
+              value: (dbChannel?.trackers?.length ?? 0).toLocaleString(),
+            },
+            {
+              name: "Created",
+              value: time(channel.createdAt, "F"),
+            },
+            {
+              name: "Last update",
+              value:
+                dbChannel && dbChannel.currentUpdate
+                  ? time(new Date(dbChannel.currentUpdate.timeHit), "F")
+                  : "None",
             },
           )
           .setImage(`https://www.banner.yt/${channelId}`)
