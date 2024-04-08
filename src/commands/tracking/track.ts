@@ -1,5 +1,6 @@
 import {
   EmbedBuilder,
+  PermissionFlagsBits,
   SlashCommandBuilder,
   type GuildTextBasedChannel,
 } from "discord.js";
@@ -36,7 +37,8 @@ export default {
         .setName("ping_role")
         .setDescription("The role to ping when a new update happens.")
         .setRequired(false),
-    ),
+    )
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
   autocomplete: ({ interaction }) => channelAutocomplete(interaction),
   run: async ({ interaction }) => {
     await interaction.deferReply({

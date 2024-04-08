@@ -1,5 +1,6 @@
 import {
   EmbedBuilder,
+  PermissionFlagsBits,
   SlashCommandBuilder,
   type GuildTextBasedChannel,
 } from "discord.js";
@@ -30,7 +31,8 @@ export default {
         )
         .addChannelTypes(...textChannelTypes)
         .setRequired(false),
-    ),
+    )
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
   autocomplete: ({ interaction }) => trackedChannelAutocomplete(interaction),
   run: async ({ interaction }) => {
     await interaction.deferReply({
