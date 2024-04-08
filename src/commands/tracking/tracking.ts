@@ -9,7 +9,11 @@ import {
   type GuildTextBasedChannel,
 } from "discord.js";
 import type { Command } from "../../structures/command";
-import { trackers, youtubeChannels, type YouTubeChannel } from "../../utils/db";
+import {
+  getYouTubeChannel,
+  trackers,
+  type YouTubeChannel,
+} from "../../utils/db";
 import config from "../../../config";
 import { abbreviate } from "../../utils/abbreviate";
 import { textChannelTypes } from "../../utils/channel-types";
@@ -52,11 +56,7 @@ export default {
       });
 
     const channels = channelTrackers
-      .map((tracker) =>
-        youtubeChannels.find(
-          (channel) => channel.id === tracker.youtubeChannelId,
-        ),
-      )
+      .map((tracker) => getYouTubeChannel(tracker.youtubeChannelId))
       .filter((channel): channel is YouTubeChannel => !!channel)
       .sort(
         (a, b) =>

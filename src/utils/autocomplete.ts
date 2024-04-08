@@ -1,6 +1,6 @@
 import type { AutocompleteInteraction } from "discord.js";
 import { cache } from "./cache";
-import { trackers, youtubeChannels, type YouTubeChannel } from "./db";
+import { getYouTubeChannel, trackers, type YouTubeChannel } from "./db";
 
 export const channelAutocomplete = async (
   interaction: AutocompleteInteraction,
@@ -34,11 +34,7 @@ export const trackedChannelAutocomplete = async (
   const focusedValue = interaction.options.getFocused();
   const channels = trackers
     .filter((tracker) => tracker.channelId === interaction.channelId)
-    .map((tracker) =>
-      youtubeChannels.find(
-        (channel) => channel.id === tracker.youtubeChannelId,
-      ),
-    )
+    .map((tracker) => getYouTubeChannel(tracker.youtubeChannelId))
     .filter((channel): channel is YouTubeChannel => !!channel)
     .sort(
       (a, b) =>
