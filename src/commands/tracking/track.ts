@@ -33,6 +33,10 @@ export default {
     ),
   autocomplete: ({ interaction }) => channelAutocomplete(interaction),
   run: async ({ interaction }) => {
+    await interaction.deferReply({
+      ephemeral: true,
+    });
+
     const textChannel =
       (interaction.options.getChannel(
         "channel",
@@ -50,7 +54,7 @@ export default {
     }
 
     if (!channel)
-      return interaction.reply({
+      return interaction.followUp({
         embeds: [
           new EmbedBuilder()
             .setTitle("Error")
@@ -61,7 +65,7 @@ export default {
       });
 
     if (isTracking(channelId, textChannel.id))
-      return interaction.reply({
+      return interaction.followUp({
         embeds: [
           new EmbedBuilder()
             .setTitle("Error")
@@ -82,7 +86,7 @@ export default {
       guildId: interaction.guild.id,
     });
 
-    interaction.reply({
+    interaction.followUp({
       embeds: [
         new EmbedBuilder()
           .setTitle("Success!")

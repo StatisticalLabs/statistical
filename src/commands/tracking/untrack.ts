@@ -4,7 +4,7 @@ import {
   type GuildTextBasedChannel,
 } from "discord.js";
 import type { Command } from "../../structures/command";
-import { channelAutocomplete } from "../../utils/autocomplete";
+import { trackedChannelAutocomplete } from "../../utils/autocomplete";
 import { getChannel, type YouTubeChannel } from "../../utils/youtube";
 import config from "../../../config";
 import { isTracking, unsubscribe } from "../../utils/db";
@@ -31,8 +31,12 @@ export default {
         .addChannelTypes(...textChannelTypes)
         .setRequired(false),
     ),
-  autocomplete: ({ interaction }) => channelAutocomplete(interaction),
+  autocomplete: ({ interaction }) => trackedChannelAutocomplete(interaction),
   run: async ({ interaction }) => {
+    await interaction.deferReply({
+      ephemeral: true,
+    });
+
     const textChannel =
       (interaction.options.getChannel(
         "channel",
@@ -50,7 +54,7 @@ export default {
     }
 
     if (!isTracking(channelId, textChannel.id))
-      return interaction.reply({
+      return interaction.followUp({
         embeds: [
           new EmbedBuilder()
             .setTitle("Error")
@@ -67,7 +71,7 @@ export default {
       channelId: interaction.channel.id,
     });
 
-    interaction.reply({
+    interaction.followUp({
       embeds: [
         new EmbedBuilder()
           .setTitle("Success!")
