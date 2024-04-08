@@ -162,8 +162,8 @@ export default async (client: BotClient<true>) => {
         const dailySubRateDifference = dailySubRate.new - dailySubRate.old;
         const secondSubRate = message.subscriberRate * 1;
 
-        if (discordChannel?.isTextBased())
-          await discordChannel.send({
+        if (discordChannel?.isTextBased()) {
+          const msg = await discordChannel.send({
             content: message.pingRoleId
               ? `<@&${message.pingRoleId}>`
               : undefined,
@@ -237,6 +237,9 @@ export default async (client: BotClient<true>) => {
                 .setTimestamp(),
             ],
           });
+
+          if (msg.crosspostable) await msg.crosspost();
+        }
 
         messagesQueue.delete(message);
       }
