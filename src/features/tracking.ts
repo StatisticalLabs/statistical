@@ -1,4 +1,10 @@
-import { EmbedBuilder, time } from "discord.js";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder,
+  time,
+} from "discord.js";
 import config from "../../config";
 import type { BotClient } from "../structures/client";
 import { trackers, youtubeChannels } from "../utils/db";
@@ -6,6 +12,7 @@ import { getChannels } from "../utils/youtube";
 import { abbreviate } from "../utils/abbreviate";
 import { cache } from "../utils/cache";
 import { gain } from "../utils/gain";
+import { readdir, mkdir, appendFile } from "fs/promises";
 
 interface Message {
   pingRoleId?: string;
@@ -27,6 +34,7 @@ let updatePossible = true;
 let messagePossible = true;
 let lastTrackTime = 0;
 let lastMessageTime = 0;
+let dirExists = false;
 const messagesQueue = new Set<Message>();
 
 function convertToReadable(timestamp: number) {
@@ -104,6 +112,18 @@ async function checkForUpdates(client: BotClient<true>) {
             subscriberRate,
           };
           await cache.set(channel.id, JSON.stringify(channel));
+
+          if (!dirExists) {
+            const checkIfExists = await readdir("data");
+            if (checkIfExists.findIndex((a) => a == "history") == -1)
+              await mkdir("data/history");
+            dirExists = true;
+          }
+
+          await appendFile(
+            "data/history/" + channel.id + ".csv",
+            `\n${currentDate.toISOString()},${channel.subscribers},${subscriberRate * (60 * 60 * 24)}`,
+          );
 
           for (const trackerId of dbChannel.trackers) {
             const trackerData = trackers.find(
@@ -235,6 +255,14 @@ export default async (client: BotClient<true>) => {
                   iconURL: client.user.displayAvatarURL(),
                 })
                 .setTimestamp(),
+            ],
+            components: [
+              new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder()
+                  .setCustomId(`untrack-${message.youtubeChannelId}`)
+                  .setLabel("Stop tracking this channel")
+                  .setStyle(ButtonStyle.Danger),
+              ),
             ],
           });
 
