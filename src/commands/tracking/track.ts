@@ -51,6 +51,7 @@ export default {
     if (!channel) {
       const channelFromYouTube = await getChannel(channelId);
       channel = channelFromYouTube;
+      if (channel) await cache.set(channelId, JSON.stringify(channel));
     }
 
     if (!channel)

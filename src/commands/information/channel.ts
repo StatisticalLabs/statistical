@@ -34,6 +34,7 @@ export default {
     if (!channel) {
       const channelFromYouTube = await getChannel(channelId);
       channel = channelFromYouTube;
+      if (channel) await cache.set(channelId, JSON.stringify(channel));
     }
     if (!channel)
       return interaction.followUp({
@@ -93,7 +94,7 @@ export default {
             },
             {
               name: "Created",
-              value: time(channel.createdAt, "F"),
+              value: time(new Date(channel.createdAt), "F"),
             },
             {
               name: "Last update",
