@@ -75,7 +75,9 @@ export default {
             {
               name: "Subscribers/day",
               value:
-                dbChannel && dbChannel.currentUpdate
+                dbChannel &&
+                dbChannel.currentUpdate &&
+                dbChannel.currentUpdate.subscriberRate
                   ? `${gain(dbChannel.currentUpdate.subscriberRate * (60 * 60 * 24), true)}`
                   : "None",
               inline: true,
@@ -83,7 +85,9 @@ export default {
             {
               name: "Subscribers/second",
               value:
-                dbChannel && dbChannel.currentUpdate
+                dbChannel &&
+                dbChannel.currentUpdate &&
+                dbChannel.currentUpdate.subscriberRate
                   ? `${gain(dbChannel.currentUpdate.subscriberRate)}`
                   : "None",
               inline: true,
