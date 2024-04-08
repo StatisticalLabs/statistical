@@ -29,6 +29,7 @@ export interface Tracker {
   guildId: string;
   userId: string;
   subscribedAt: string;
+  pingRoleId?: string;
 }
 
 async function checkIfDataExists() {
@@ -85,6 +86,7 @@ function subscribe(options: {
   channelId: string;
   userId: string;
   guildId: string;
+  pingRoleId?: string;
 }) {
   if (isTracking(options.youtubeChannelId, options.channelId)) return false;
 
@@ -107,6 +109,7 @@ function subscribe(options: {
     guildId: options.guildId,
     userId: options.userId,
     subscribedAt: new Date().toISOString(),
+    pingRoleId: options.pingRoleId,
   });
 }
 

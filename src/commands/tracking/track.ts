@@ -30,6 +30,12 @@ export default {
         .setDescription("The channel to send the latest updates to.")
         .addChannelTypes(...textChannelTypes)
         .setRequired(false),
+    )
+    .addRoleOption((option) =>
+      option
+        .setName("ping_role")
+        .setDescription("The role to ping when a new update happens.")
+        .setRequired(false),
     ),
   autocomplete: ({ interaction }) => channelAutocomplete(interaction),
   run: async ({ interaction }) => {
@@ -41,6 +47,8 @@ export default {
       (interaction.options.getChannel(
         "channel",
       ) as GuildTextBasedChannel | null) ?? interaction.channel;
+
+    const pingRole = interaction.options.getRole("ping_role");
 
     const channelId = interaction.options.getString("query", true);
 
@@ -85,6 +93,7 @@ export default {
       channelId: textChannel.id,
       userId: interaction.user.id,
       guildId: interaction.guild.id,
+      pingRoleId: pingRole?.id ?? undefined,
     });
 
     interaction.followUp({

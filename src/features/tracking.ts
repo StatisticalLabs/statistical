@@ -8,6 +8,7 @@ import { cache } from "../utils/cache";
 import { gain } from "../utils/gain";
 
 interface Message {
+  pingRoleId?: string;
   channelId: string;
   youtubeChannelId: string;
   name: string;
@@ -116,6 +117,7 @@ async function checkForUpdates(client: BotClient<true>) {
                 .catch(console.error);
 
             messagesQueue.add({
+              pingRoleId: trackerData.pingRoleId,
               channelId: trackerData.channelId,
               youtubeChannelId: channel.id,
               name: channel.name,
@@ -162,6 +164,9 @@ export default async (client: BotClient<true>) => {
 
         if (discordChannel?.isTextBased())
           await discordChannel.send({
+            content: message.pingRoleId
+              ? `<@&${message.pingRoleId}>`
+              : undefined,
             embeds: [
               new EmbedBuilder()
                 .setAuthor({
