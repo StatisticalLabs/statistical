@@ -3,7 +3,8 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "start": "bun src/index.ts"
   },
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
