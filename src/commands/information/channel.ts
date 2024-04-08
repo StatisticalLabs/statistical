@@ -8,6 +8,63 @@ import { channelAutocomplete } from "../../utils/autocomplete";
 import { getYouTubeChannel } from "../../utils/db";
 import { gain } from "../../utils/gain";
 
+function calculateNextMilestone(
+  subscriberCount: number,
+  isDecreasing: boolean,
+) {
+  let milestone = 0;
+  if (isDecreasing) {
+    if (subscriberCount > 100000000)
+      milestone = Math.ceil(subscriberCount / 1000000) * 1000000 - 1000000;
+    else if (subscriberCount > 10000000)
+      milestone = Math.ceil(subscriberCount / 100000) * 100000 - 100000;
+    else if (subscriberCount > 1000000)
+      milestone = Math.ceil(subscriberCount / 10000) * 10000 - 10000;
+    else if (subscriberCount > 100000)
+      milestone = Math.ceil(subscriberCount / 1000) * 1000 - 1000;
+    else if (subscriberCount > 10000)
+      milestone = Math.ceil(subscriberCount / 100) * 100 - 100;
+    else if (subscriberCount > 1000)
+      milestone = Math.ceil(subscriberCount / 10) * 10 - 10;
+    else milestone = subscriberCount - 1;
+  } else {
+    if (subscriberCount >= 100000000)
+      milestone = Math.floor(subscriberCount / 1000000) * 1000000 + 1000000;
+    else if (subscriberCount >= 10000000)
+      milestone = Math.floor(subscriberCount / 100000) * 100000 + 100000;
+    else if (subscriberCount >= 1000000)
+      milestone = Math.floor(subscriberCount / 10000) * 10000 + 10000;
+    else if (subscriberCount >= 100000)
+      milestone = Math.floor(subscriberCount / 1000) * 1000 + 1000;
+    else if (subscriberCount >= 10000)
+      milestone = Math.floor(subscriberCount / 100) * 100 + 100;
+    else if (subscriberCount >= 1000)
+      milestone = Math.floor(subscriberCount / 10) * 10 + 10;
+    else milestone = subscriberCount + 1;
+  }
+  return milestone;
+}
+
+function calculateTimeUntilNextMilestone(stats: {
+  subscriberCount: number;
+  subscriberRate: number;
+  lastUpdated: string;
+}) {
+  const isDecreasing = stats.subscriberRate < 0;
+  const nextMilestone = calculateNextMilestone(
+    stats.subscriberCount,
+    isDecreasing,
+  );
+  let neededSubsForNextMilestone = isDecreasing
+    ? stats.subscriberCount - nextMilestone
+    : nextMilestone - stats.subscriberCount;
+  const daysToNextMilestone =
+    neededSubsForNextMilestone /
+    Math.abs(stats.subscriberRate * (60 * 60 * 24));
+  const lastUpdatedEpoch = new Date(stats.lastUpdated).getTime();
+  return `<t:${Math.floor((lastUpdatedEpoch + daysToNextMilestone * 86400000) / 1000)}:R>`;
+}
+
 export default {
   data: new SlashCommandBuilder()
     .setName("channel")
@@ -47,6 +104,8 @@ export default {
       });
 
     const dbChannel = getYouTubeChannel(channelId);
+
+    const isDecreasing = (dbChannel?.currentUpdate?.subscriberRate ?? 0) < 0;
 
     interaction.followUp({
       embeds: [
@@ -91,6 +150,15 @@ export default {
                   ? `${gain(dbChannel.currentUpdate.subscriberRate)}`
                   : "None",
               inline: true,
+            },
+            {
+              name: `Time until ${abbreviate(calculateNextMilestone(channel.subscribers, isDecreasing))}`,
+              value: calculateTimeUntilNextMilestone({
+                subscriberCount: channel.subscribers,
+                subscriberRate: dbChannel?.currentUpdate?.subscriberRate ?? 0,
+                lastUpdated:
+                  dbChannel?.currentUpdate?.timeHit ?? new Date().toISOString(),
+              }),
             },
             {
               name: `Channels tracking ${channel.name}`,
