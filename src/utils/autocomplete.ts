@@ -8,7 +8,7 @@ export const channelAutocomplete = async (
   const focusedValue = interaction.options.getFocused() || "mrbeast";
 
   const cachedSearchResults = await cache.get(
-    "search_" + focusedValue.toLowerCase(),
+    "search_" + focusedValue.toLowerCase().replace(/ /g, "_"),
   );
   if (cachedSearchResults) {
     await interaction.respond(await JSON.parse(cachedSearchResults));
