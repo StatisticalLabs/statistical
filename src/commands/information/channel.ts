@@ -6,7 +6,7 @@ import config from "../../../config";
 import { abbreviate } from "../../utils/abbreviate";
 import { channelAutocomplete } from "../../utils/autocomplete";
 import { getYouTubeChannel } from "../../utils/db";
-import { sign } from "../../utils/sign";
+import { gain } from "../../utils/gain";
 
 export default {
   data: new SlashCommandBuilder()
@@ -90,7 +90,7 @@ export default {
               name: "Subscribers/day",
               value:
                 dbChannel && dbChannel.currentUpdate
-                  ? `${sign(Math.floor(dbChannel.currentUpdate.subscriberRate * (60 * 60 * 24)))}${Math.floor(dbChannel.currentUpdate.subscriberRate * (60 * 60 * 24)).toLocaleString()}`
+                  ? `${gain(dbChannel.currentUpdate.subscriberRate * (60 * 60 * 24), true)}`
                   : "None",
               inline: true,
             },
@@ -98,7 +98,7 @@ export default {
               name: "Subscribers/second",
               value:
                 dbChannel && dbChannel.currentUpdate
-                  ? `${sign(dbChannel.currentUpdate.subscriberRate)}${dbChannel.currentUpdate.subscriberRate.toLocaleString()}`
+                  ? `${gain(dbChannel.currentUpdate.subscriberRate)}`
                   : "None",
               inline: true,
             },

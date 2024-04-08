@@ -5,7 +5,7 @@ import { trackers, youtubeChannels } from "../utils/db";
 import { getChannels } from "../utils/youtube";
 import { abbreviate } from "../utils/abbreviate";
 import { cache } from "../utils/cache";
-import { sign } from "../utils/sign";
+import { gain } from "../utils/gain";
 
 interface Message {
   channelId: string;
@@ -209,12 +209,12 @@ export default async (client: BotClient<true>) => {
                             : "(⏫)"
                         : ""
                     }`,
-                    value: `${sign(dailySubRate.new)}${Math.floor(dailySubRate.new).toLocaleString()} (${sign(dailySubRateDifference)}${Math.floor(dailySubRateDifference).toLocaleString()})`,
+                    value: `${gain(dailySubRate.new, true)} (${gain(dailySubRateDifference, true)})`,
                     inline: true,
                   },
                   {
                     name: "Subscribers/second",
-                    value: `${secondSubRate === 0 || secondSubRate > 0 ? "+" : ""}${secondSubRate.toLocaleString()}`,
+                    value: gain(secondSubRate),
                     inline: true,
                   },
                 ])
