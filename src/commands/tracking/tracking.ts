@@ -51,7 +51,7 @@ export default {
         ephemeral: true,
       });
 
-    const channels = trackers
+    const channels = channelTrackers
       .map((tracker) =>
         youtubeChannels.find(
           (channel) => channel.id === tracker.youtubeChannelId,
