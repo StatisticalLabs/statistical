@@ -29,7 +29,10 @@ export const channelAutocomplete = async (
     name: `${channel.name} (${channel.username})`,
     value: channel.id,
   }));
-  await cache.set("search_" + focusedValue, JSON.stringify(channels));
+  await cache.set(
+    "search_" + focusedValue.toLowerCase().replace(/ /g, "_"),
+    JSON.stringify(channels),
+  );
   await interaction.respond(channels);
 };
 
