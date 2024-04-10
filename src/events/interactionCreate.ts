@@ -1,7 +1,9 @@
 import {
   ActionRowBuilder,
+  AttachmentBuilder,
   AutocompleteInteraction,
   ButtonBuilder,
+  ButtonStyle,
   EmbedBuilder,
   GuildMember,
 } from "discord.js";
@@ -11,7 +13,14 @@ import config from "../../config";
 import { cache } from "../utils/cache";
 import { getChannel, type YouTubeChannel } from "../utils/youtube";
 import { getYouTubeChannel, isTracking, unsubscribe } from "../utils/db";
-import { generateUpdateImage } from "../utils/image";
+import { generateUpdateImage, rgbToHex } from "../utils/image";
+import { createCanvas, loadImage } from "@napi-rs/canvas";
+import { Chart, registerables } from "chart.js";
+import "chartjs-adapter-date-fns";
+import { graphConfiguration } from "../utils/graph";
+import { createId } from "@paralleldrive/cuid2";
+
+Chart.register(...registerables);
 
 export default event("interactionCreate", async (client, interaction) => {
   if (interaction.isChatInputCommand()) {
@@ -123,6 +132,151 @@ export default event("interactionCreate", async (client, interaction) => {
         components: [row],
         files: [attachment],
       });
+    } else if (interaction.customId.startsWith("graph-")) {
+      await interaction.deferReply({
+        ephemeral: true,
+      });
+
+      const [channelId, type] = interaction.customId
+        .split("graph-")[1]
+        .split(":");
+
+      const cachedChannel = await cache.get(channelId).catch(() => null);
+      let channel = cachedChannel
+        ? ((await JSON.parse(cachedChannel)) as YouTubeChannel)
+        : null;
+      if (!channel) {
+        const channelFromYouTube = await getChannel(channelId);
+        channel = channelFromYouTube;
+        if (channel) await cache.set(channelId, JSON.stringify(channel));
+      }
+      if (!channel)
+        return interaction.followUp({
+          embeds: [
+            new EmbedBuilder()
+              .setTitle("Error")
+              .setDescription(`No channel found with ID **${channelId}**.`)
+              .setColor(config.colors.danger),
+          ],
+        });
+
+      const previousUpdatesFile = Bun.file(`data/history/${channelId}.csv`);
+      if (previousUpdatesFile.size === 0)
+        return interaction.followUp({
+          embeds: [
+            new EmbedBuilder()
+              .setTitle("Error")
+              .setDescription(`**${channel.name}** is not being tracked.`)
+              .setColor(config.colors.danger),
+          ],
+        });
+      const lines = (await previousUpdatesFile.text()).split("\n");
+      lines.splice(0, 1);
+      const previousUpdates = lines.map((line) => {
+        const [date, subscribers, average] = line.split(",");
+        return [new Date(date), parseInt(subscribers), parseInt(average)];
+      }) as [Date, number, number][];
+
+      switch (type) {
+        default:
+          {
+            interaction.followUp({
+              content: "Select a graph type:",
+              components: [
+                new ActionRowBuilder<ButtonBuilder>().addComponents(
+                  new ButtonBuilder()
+                    .setCustomId(`graph-${channelId}:subscribers`)
+                    .setLabel("Subscriber graph")
+                    .setStyle(ButtonStyle.Primary),
+                  new ButtonBuilder()
+                    .setCustomId(`graph-${channelId}:average`)
+                    .setLabel("Subscribers/day graph")
+                    .setStyle(ButtonStyle.Success),
+                ),
+              ],
+              ephemeral: true,
+            });
+          }
+          break;
+        case "subscribers":
+          {
+            const canvas = createCanvas(800, 600);
+            const ctx = canvas.getContext("2d");
+
+            const avatar = await loadImage(channel.avatar);
+
+            ctx.drawImage(avatar, -100, -100, 280, 280);
+            const { data: avatarData } = ctx.getImageData(-100, -100, 280, 280);
+
+            const chart = new Chart(
+              ctx,
+              graphConfiguration(`Subscribers for ${channel.name}`, {
+                labels: previousUpdates.map(([date]) => date),
+                datasets: [
+                  {
+                    label: channel.name,
+                    data: previousUpdates.map(([, subscribers]) => subscribers),
+                    backgroundColor: `rgb(${avatarData[0]}, ${avatarData[1]}, ${avatarData[2]})`,
+                    borderColor: `rgb(${avatarData[0]}, ${avatarData[1]}, ${avatarData[2]})`,
+                    tension: 0.1,
+                    pointRadius: 2.4,
+                  },
+                ],
+              }),
+            );
+
+            chart.draw();
+            const buffer = canvas.toBuffer("image/png");
+
+            const attachment = new AttachmentBuilder(buffer, {
+              name: `subscribers-graph-${createId()}.png`,
+            });
+
+            interaction.followUp({
+              files: [attachment],
+            });
+          }
+          break;
+        case "average":
+          {
+            const canvas = createCanvas(800, 600);
+            const ctx = canvas.getContext("2d");
+
+            const avatar = await loadImage(channel.avatar);
+
+            ctx.drawImage(avatar, -100, -100, 280, 280);
+            const { data: avatarData } = ctx.getImageData(-100, -100, 280, 280);
+
+            const chart = new Chart(
+              ctx,
+              graphConfiguration(`Subscribers/day for ${channel.name}`, {
+                labels: previousUpdates.map(([date]) => date),
+                datasets: [
+                  {
+                    label: channel.name,
+                    data: previousUpdates.map(([, , average]) => average),
+                    backgroundColor: `rgb(${avatarData[0]}, ${avatarData[1]}, ${avatarData[2]})`,
+                    borderColor: `rgb(${avatarData[0]}, ${avatarData[1]}, ${avatarData[2]})`,
+                    tension: 0.1,
+                    pointRadius: 2.4,
+                  },
+                ],
+              }),
+            );
+
+            chart.draw();
+            const buffer = canvas.toBuffer("image/png");
+
+            const attachment = new AttachmentBuilder(buffer, {
+              name: `average-graph-${createId()}.png`,
+            });
+
+            interaction.followUp({
+              files: [attachment],
+            });
+          }
+          break;
+      }
     } else if (interaction.customId.startsWith("untrack-")) {
       await interaction.deferReply({
         ephemeral: true,

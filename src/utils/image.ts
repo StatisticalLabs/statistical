@@ -1,16 +1,8 @@
-import { GlobalFonts, createCanvas, loadImage } from "@napi-rs/canvas";
+import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import { createId } from "@paralleldrive/cuid2";
 
-GlobalFonts.registerFromPath("./assets/fonts/Inter-Bold.ttf", "InterBold");
-GlobalFonts.registerFromPath("./assets/fonts/Inter-Medium.ttf", "InterMedium");
-GlobalFonts.registerFromPath(
-  "./assets/fonts/Inter-Regular.ttf",
-  "InterRegular",
-);
-GlobalFonts.registerFromPath("./assets/fonts/Roboto-Bold.ttf", "RobotoBold");
-
-const rgbToHex = (r: any, g: any, b: any) =>
+export const rgbToHex = (r: any, g: any, b: any) =>
   "#" +
   [r, g, b]
     .map((x) => {

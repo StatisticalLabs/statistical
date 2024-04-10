@@ -267,6 +267,10 @@ export default async (client: BotClient<true>) => {
                   .setLabel("Generate image")
                   .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
+                  .setCustomId(`graph-${message.youtubeChannelId}`)
+                  .setLabel("View growth graphs")
+                  .setStyle(ButtonStyle.Success),
+                new ButtonBuilder()
                   .setCustomId(`untrack-${message.youtubeChannelId}`)
                   .setLabel("Stop tracking this channel")
                   .setStyle(ButtonStyle.Danger),

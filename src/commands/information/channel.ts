@@ -1,4 +1,11 @@
-import { EmbedBuilder, SlashCommandBuilder, time } from "discord.js";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder,
+  SlashCommandBuilder,
+  time,
+} from "discord.js";
 import type { Command } from "../../structures/command";
 import { getChannel, type YouTubeChannel } from "../../utils/youtube";
 import { cache } from "../../utils/cache";
@@ -178,6 +185,18 @@ export default {
           )
           .setImage(`https://www.banner.yt/${channelId}`)
           .setColor(config.colors.primary),
+      ],
+      components: [
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder()
+            .setCustomId(`graph-${channelId}:subscribers`)
+            .setLabel("Subscriber graph")
+            .setStyle(ButtonStyle.Primary),
+          new ButtonBuilder()
+            .setCustomId(`graph-${channelId}:average`)
+            .setLabel("Subscribers/day graph")
+            .setStyle(ButtonStyle.Success),
+        ),
       ],
     });
   },
