@@ -1,4 +1,10 @@
-import { AutocompleteInteraction, EmbedBuilder, GuildMember } from "discord.js";
+import {
+  ActionRowBuilder,
+  AutocompleteInteraction,
+  ButtonBuilder,
+  EmbedBuilder,
+  GuildMember,
+} from "discord.js";
 import { event } from "../structures/event";
 import type { ExtendedChatInputCommandInteraction } from "../structures/command";
 import config from "../../config";
@@ -54,8 +60,6 @@ export default event("interactionCreate", async (client, interaction) => {
     }
   } else if (interaction.isButton()) {
     if (interaction.customId.startsWith("image-")) {
-      await interaction.deferReply();
-
       let [
         channelId,
         updateTimeAsNumber,
@@ -83,13 +87,14 @@ export default event("interactionCreate", async (client, interaction) => {
         !dbChannel.currentUpdate ||
         !dbChannel.lastUpdate
       )
-        return interaction.followUp({
+        return interaction.reply({
           embeds: [
             new EmbedBuilder()
               .setTitle("Error")
               .setDescription("This channel is not being tracked.")
               .setColor(config.colors.danger),
           ],
+          ephemeral: true,
         });
 
       const attachment = await generateUpdateImage({
@@ -104,7 +109,18 @@ export default event("interactionCreate", async (client, interaction) => {
         timeTook: parseInt(timeTook),
       });
 
-      interaction.followUp({
+      const row = new ActionRowBuilder<ButtonBuilder>(
+        interaction.message.components[0].toJSON(),
+      );
+      row.components.splice(0, 1);
+
+      interaction.update({
+        embeds: [
+          new EmbedBuilder(interaction.message.embeds[0].toJSON()).setImage(
+            `attachment://${attachment.name}`,
+          ),
+        ],
+        components: [row],
         files: [attachment],
       });
     } else if (interaction.customId.startsWith("untrack-")) {
