@@ -173,6 +173,7 @@ export default async (client: BotClient<true>) => {
     messagePossible = false;
     try {
       for await (const message of messagesQueue) {
+        await client.channels.fetch(message.channelId);
         const discordChannel = client.channels.cache.get(message.channelId);
 
         const dailySubRate = {
@@ -250,6 +251,7 @@ export default async (client: BotClient<true>) => {
                       ? config.colors.warning
                       : config.colors.success,
                 )
+                .setImage(`attachment://${message.youtubeChannelId}.png`)
                 .setFooter({
                   text: client.user.username,
                   iconURL: client.user.displayAvatarURL(),
@@ -258,6 +260,12 @@ export default async (client: BotClient<true>) => {
             ],
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder()
+                  .setCustomId(
+                    `asdf-${message.youtubeChannelId}:${message.currentUpdateTime.getTime()}:${message.timeTook}:${message.oldApiCount ?? 0}:${message.newApiCount}:${dailySubRate.new}`,
+                  )
+                  .setLabel("Generate image")
+                  .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                   .setCustomId(`untrack-${message.youtubeChannelId}`)
                   .setLabel("Stop tracking this channel")

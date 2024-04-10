@@ -4,7 +4,8 @@ import type { ExtendedChatInputCommandInteraction } from "../structures/command"
 import config from "../../config";
 import { cache } from "../utils/cache";
 import { getChannel, type YouTubeChannel } from "../utils/youtube";
-import { isTracking, unsubscribe } from "../utils/db";
+import { getYouTubeChannel, isTracking, unsubscribe } from "../utils/db";
+import { generateUpdateImage } from "../utils/image";
 
 export default event("interactionCreate", async (client, interaction) => {
   if (interaction.isChatInputCommand()) {
@@ -52,7 +53,61 @@ export default event("interactionCreate", async (client, interaction) => {
       console.error(err);
     }
   } else if (interaction.isButton()) {
-    if (interaction.customId.startsWith("untrack-")) {
+    if (interaction.customId.startsWith("asdf-")) {
+      await interaction.deferReply();
+
+      let [
+        channelId,
+        updateTimeAsNumber,
+        timeTook,
+        lastCount,
+        subCount,
+        dailyAVG,
+      ] = interaction.customId.split("asdf-")[1].split(":");
+      const updateTime = new Date(parseInt(updateTimeAsNumber));
+
+      const cachedChannel = await cache.get(channelId).catch(() => null);
+      let channel = cachedChannel
+        ? ((await JSON.parse(cachedChannel)) as YouTubeChannel)
+        : null;
+      if (!channel) {
+        const channelFromYouTube = await getChannel(channelId);
+        channel = channelFromYouTube;
+        if (channel) await cache.set(channelId, JSON.stringify(channel));
+      }
+
+      const dbChannel = getYouTubeChannel(channelId);
+      if (
+        !channel ||
+        !dbChannel ||
+        !dbChannel.currentUpdate ||
+        !dbChannel.lastUpdate
+      )
+        return interaction.followUp({
+          embeds: [
+            new EmbedBuilder()
+              .setTitle("Error")
+              .setDescription("This channel is not being tracked.")
+              .setColor(config.colors.danger),
+          ],
+        });
+
+      const attachment = await generateUpdateImage({
+        youtubeChannelId: channelId,
+        name: channel.name,
+        handle: channel.handle,
+        avatar: channel.avatar,
+        lastCount: parseInt(lastCount),
+        subCount: parseInt(subCount),
+        dailyAVG: parseInt(dailyAVG),
+        updateTime,
+        timeTook: parseInt(timeTook),
+      });
+
+      interaction.followUp({
+        files: [attachment],
+      });
+    } else if (interaction.customId.startsWith("untrack-")) {
       await interaction.deferReply({
         ephemeral: true,
       });
