@@ -226,11 +226,13 @@ export default event("interactionCreate", async (client, interaction) => {
             );
 
             chart.draw();
-            const buffer = canvas.toBuffer("image/png");
 
-            const attachment = new AttachmentBuilder(buffer, {
-              name: `subscribers-graph-${createId()}.png`,
-            });
+            const attachment = new AttachmentBuilder(
+              await canvas.encode("png"),
+              {
+                name: `subscribers-graph-${createId()}.png`,
+              },
+            );
 
             interaction.followUp({
               files: [attachment],
@@ -265,11 +267,13 @@ export default event("interactionCreate", async (client, interaction) => {
             );
 
             chart.draw();
-            const buffer = canvas.toBuffer("image/png");
 
-            const attachment = new AttachmentBuilder(buffer, {
-              name: `average-graph-${createId()}.png`,
-            });
+            const attachment = new AttachmentBuilder(
+              await canvas.encode("png"),
+              {
+                name: `average-graph-${createId()}.png`,
+              },
+            );
 
             interaction.followUp({
               files: [attachment],
