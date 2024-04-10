@@ -4,13 +4,13 @@ import {
   SlashCommandBuilder,
   type GuildTextBasedChannel,
 } from "discord.js";
-import type { Command } from "../../structures/command";
-import { channelAutocomplete } from "../../utils/autocomplete";
-import { getChannel, type YouTubeChannel } from "../../utils/youtube";
-import { isTracking, subscribe } from "../../utils/db";
-import config from "../../../config";
-import { cache } from "../../utils/cache";
-import { textChannelTypes } from "../../utils/channel-types";
+import type { Command } from "@/structures/command";
+import { channelAutocomplete } from "@/utils/autocomplete";
+import { getChannel, type YouTubeChannel } from "@/utils/youtube";
+import { isTracking, subscribe } from "@/utils/db";
+import config from "config";
+import { cache } from "@/utils/cache";
+import { textChannelTypes } from "@/utils/channel-types";
 
 export default {
   data: new SlashCommandBuilder()

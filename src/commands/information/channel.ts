@@ -6,14 +6,14 @@ import {
   SlashCommandBuilder,
   time,
 } from "discord.js";
-import type { Command } from "../../structures/command";
-import { getChannel, type YouTubeChannel } from "../../utils/youtube";
-import { cache } from "../../utils/cache";
-import config from "../../../config";
-import { abbreviate } from "../../utils/abbreviate";
-import { channelAutocomplete } from "../../utils/autocomplete";
-import { getYouTubeChannel } from "../../utils/db";
-import { gain } from "../../utils/gain";
+import type { Command } from "@/structures/command";
+import { getChannel, type YouTubeChannel } from "@/utils/youtube";
+import { cache } from "@/utils/cache";
+import config from "config";
+import { abbreviate } from "@/utils/abbreviate";
+import { channelAutocomplete } from "@/utils/autocomplete";
+import { getYouTubeChannel } from "@/utils/db";
+import { gain } from "@/utils/gain";
 
 function calculateNextMilestone(
   subscriberCount: number,

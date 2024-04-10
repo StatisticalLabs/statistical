@@ -1,11 +1,6 @@
 import type { AutocompleteInteraction } from "discord.js";
 import { cache } from "./cache";
-import {
-  getYouTubeChannel,
-  trackers,
-  youtubeChannels,
-  type YouTubeChannel,
-} from "./db";
+import { getYouTubeChannel, trackers, type YouTubeChannel } from "./db";
 
 export const channelAutocomplete = async (
   interaction: AutocompleteInteraction,

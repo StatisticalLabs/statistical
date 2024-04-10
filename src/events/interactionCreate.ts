@@ -7,17 +7,17 @@ import {
   EmbedBuilder,
   GuildMember,
 } from "discord.js";
-import { event } from "../structures/event";
-import type { ExtendedChatInputCommandInteraction } from "../structures/command";
-import config from "../../config";
-import { cache } from "../utils/cache";
-import { getChannel, type YouTubeChannel } from "../utils/youtube";
-import { getYouTubeChannel, isTracking, unsubscribe } from "../utils/db";
-import { generateUpdateImage } from "../utils/image";
+import { event } from "@/structures/event";
+import type { ExtendedChatInputCommandInteraction } from "@/structures/command";
+import config from "config";
+import { cache } from "@/utils/cache";
+import { getChannel, type YouTubeChannel } from "@/utils/youtube";
+import { getYouTubeChannel, isTracking, unsubscribe } from "@/utils/db";
+import { generateUpdateImage } from "@/utils/image";
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { Chart, registerables } from "chart.js";
 import "chartjs-adapter-date-fns";
-import { graphConfiguration } from "../utils/graph";
+import { graphConfiguration } from "@/utils/graph";
 import { createId } from "@paralleldrive/cuid2";
 
 Chart.register(...registerables);

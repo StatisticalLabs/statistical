@@ -1,9 +1,8 @@
 import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import type { Command } from "../../structures/command";
-import { databaseChannelAutocomplete } from "../../utils/autocomplete";
-import { getYouTubeChannel, youtubeChannels } from "../../utils/db";
-import config from "../../../config";
-import { gain } from "../../utils/gain";
+import { getYouTubeChannel, youtubeChannels } from "@/utils/db";
+import config from "config";
+import { gain } from "@/utils/gain";
 
 export default {
   data: new SlashCommandBuilder()

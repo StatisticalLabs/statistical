@@ -5,13 +5,13 @@ import {
   EmbedBuilder,
   time,
 } from "discord.js";
-import config from "../../config";
-import type { BotClient } from "../structures/client";
-import { trackers, youtubeChannels } from "../utils/db";
-import { getChannels } from "../utils/youtube";
-import { abbreviate } from "../utils/abbreviate";
-import { cache } from "../utils/cache";
-import { gain } from "../utils/gain";
+import config from "config";
+import type { BotClient } from "@/structures/client";
+import { trackers, youtubeChannels } from "@/utils/db";
+import { getChannels } from "@/utils/youtube";
+import { abbreviate } from "@/utils/abbreviate";
+import { cache } from "@/utils/cache";
+import { gain } from "@/utils/gain";
 import { readdir, mkdir, appendFile } from "fs/promises";
 
 interface Message {

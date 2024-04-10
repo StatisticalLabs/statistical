@@ -8,15 +8,11 @@ import {
   SlashCommandBuilder,
   type GuildTextBasedChannel,
 } from "discord.js";
-import type { Command } from "../../structures/command";
-import {
-  getYouTubeChannel,
-  trackers,
-  type YouTubeChannel,
-} from "../../utils/db";
-import config from "../../../config";
-import { abbreviate } from "../../utils/abbreviate";
-import { textChannelTypes } from "../../utils/channel-types";
+import type { Command } from "@/structures/command";
+import { getYouTubeChannel, trackers, type YouTubeChannel } from "@/utils/db";
+import config from "config";
+import { abbreviate } from "@/utils/abbreviate";
+import { textChannelTypes } from "@/utils/channel-types";
 
 export default {
   data: new SlashCommandBuilder()
