@@ -172,10 +172,15 @@ export default event("interactionCreate", async (client, interaction) => {
         });
       const lines = (await previousUpdatesFile.text()).split("\n");
       lines.splice(0, 1);
-      const previousUpdates = lines.map((line) => {
-        const [date, subscribers, average] = line.split(",");
-        return [new Date(date), parseInt(subscribers), parseInt(average)];
-      }) as [Date, number, number][];
+      const previousUpdates = (
+        lines.map((line) => {
+          const [date, subscribers, average] = line.split(",");
+          return [new Date(date), parseInt(subscribers), parseInt(average)];
+        }) as [Date, number, number][]
+      ).filter(
+        ([date, subscribers, average]) =>
+          !isNaN(date.getTime()) && !isNaN(subscribers) && !isNaN(average),
+      );
 
       switch (type) {
         default:
