@@ -129,7 +129,10 @@ export default {
               value: `${Math.floor(subGap).toLocaleString()} (${gain(channel1Daily - channel2Daily, true)}/day)`,
             },
           )
-          .setColor(config.colors.primary),
+          .setColor(config.colors.primary)
+          .setFooter({
+            text: "Note: These estimations do not account for overestimations.",
+          }),
       ],
     });
   },
