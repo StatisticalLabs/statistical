@@ -2,7 +2,7 @@ import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import { createId } from "@paralleldrive/cuid2";
 
-export const rgbToHex = (r: any, g: any, b: any) =>
+const rgbToHex = (r: any, g: any, b: any) =>
   "#" +
   [r, g, b]
     .map((x) => {

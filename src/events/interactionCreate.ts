@@ -13,7 +13,7 @@ import config from "../../config";
 import { cache } from "../utils/cache";
 import { getChannel, type YouTubeChannel } from "../utils/youtube";
 import { getYouTubeChannel, isTracking, unsubscribe } from "../utils/db";
-import { generateUpdateImage, rgbToHex } from "../utils/image";
+import { generateUpdateImage } from "../utils/image";
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { Chart, registerables } from "chart.js";
 import "chartjs-adapter-date-fns";
