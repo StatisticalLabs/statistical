@@ -262,7 +262,7 @@ export default async (client: BotClient<true>) => {
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
                   .setCustomId(
-                    `asdf-${message.youtubeChannelId}:${message.currentUpdateTime.getTime()}:${message.timeTook}:${message.oldApiCount ?? 0}:${message.newApiCount}:${dailySubRate.new}`,
+                    `image-${message.youtubeChannelId}:${message.currentUpdateTime.getTime()}:${message.timeTook}:${message.oldApiCount ?? 0}:${message.newApiCount}:${dailySubRate.new}`,
                   )
                   .setLabel("Generate image")
                   .setStyle(ButtonStyle.Secondary),

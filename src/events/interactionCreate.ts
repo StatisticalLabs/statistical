@@ -53,7 +53,7 @@ export default event("interactionCreate", async (client, interaction) => {
       console.error(err);
     }
   } else if (interaction.isButton()) {
-    if (interaction.customId.startsWith("asdf-")) {
+    if (interaction.customId.startsWith("image-")) {
       await interaction.deferReply();
 
       let [
@@ -63,7 +63,7 @@ export default event("interactionCreate", async (client, interaction) => {
         lastCount,
         subCount,
         dailyAVG,
-      ] = interaction.customId.split("asdf-")[1].split(":");
+      ] = interaction.customId.split("image-")[1].split(":");
       const updateTime = new Date(parseInt(updateTimeAsNumber));
 
       const cachedChannel = await cache.get(channelId).catch(() => null);
