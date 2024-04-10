@@ -1,7 +1,7 @@
 import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import type { Command } from "../../structures/command";
 import { databaseChannelAutocomplete } from "../../utils/autocomplete";
-import { getYouTubeChannel } from "../../utils/db";
+import { getYouTubeChannel, youtubeChannels } from "../../utils/db";
 import config from "../../../config";
 import { gain } from "../../utils/gain";
 
@@ -25,7 +25,27 @@ export default {
         .setAutocomplete(true)
         .setRequired(true),
     ),
-  autocomplete: ({ interaction }) => databaseChannelAutocomplete(interaction),
+  autocomplete: async ({ interaction }) => {
+    const focusedOption = interaction.options.getFocused(true);
+    let channels = [...youtubeChannels]
+      .sort(
+        (a, b) =>
+          (b.currentUpdate?.subscribers ?? 0) -
+          (a.currentUpdate?.subscribers ?? 0),
+      )
+      .map((channel) => ({
+        name: `${channel.name}${channel.handle ? ` (${channel.handle})` : ""}`,
+        value: channel.id,
+      }));
+    if (focusedOption.name === "channel_2") {
+      const firstChannelId = interaction.options.getString("channel_1", true);
+      channels = channels.filter((channel) => channel.value !== firstChannelId);
+    }
+    const filtered = channels.filter((channel) =>
+      channel.name.includes(focusedOption.value),
+    );
+    await interaction.respond(filtered);
+  },
   run: ({ interaction }) => {
     const channelIds = [
       interaction.options.getString("channel_1", true),
