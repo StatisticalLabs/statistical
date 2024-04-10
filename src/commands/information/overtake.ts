@@ -68,9 +68,16 @@ export default {
       channel2.currentUpdate.subscriberRate <
       channel1.currentUpdate.subscriberRate
     )
-      return interaction.reply(
-        `**${channel2.name}** can't overtake **${channel1.name}**.\nThe channel would need at least more than **${Math.round((channel1.currentUpdate.subscriberRate - channel2.currentUpdate.subscriberRate) * 86400).toLocaleString()}** subscribers/day to be able to pass.`,
-      );
+      return interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle(`${channel2.name} can't overtake ${channel1.name}`)
+            .setDescription(
+              `The channel would need at least more than **${Math.round((channel1.currentUpdate.subscriberRate - channel2.currentUpdate.subscriberRate) * 86400).toLocaleString()}** subscribers/day to be able to pass.`,
+            )
+            .setColor(config.colors.danger),
+        ],
+      });
 
     const channel1Daily = channel1.currentUpdate.subscriberRate * 86400;
     const channel2Daily = channel2.currentUpdate.subscriberRate * 86400;
