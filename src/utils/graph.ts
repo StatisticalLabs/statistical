@@ -36,6 +36,12 @@ export const graphConfiguration = (
       legend: {
         display: false,
       },
+      subtitle: {
+        display: true,
+        text: "Statistical",
+        position: "bottom",
+        align: "end",
+      },
     },
     scales: {
       x: {
@@ -52,12 +58,12 @@ export const graphConfiguration = (
           },
         },
         grid: {
-          color: "transparent",
+          color: "#333333",
         },
       },
       y: {
         grid: {
-          color: "transparent",
+          color: "#333333",
         },
       },
     },

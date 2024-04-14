@@ -205,7 +205,7 @@ export default event("interactionCreate", async (client, interaction) => {
           break;
         case "subscribers":
           {
-            const canvas = createCanvas(800, 600);
+            const canvas = createCanvas(1500, 600);
             const ctx = canvas.getContext("2d");
 
             const avatar = await loadImage(channel.avatar);
@@ -246,7 +246,7 @@ export default event("interactionCreate", async (client, interaction) => {
           break;
         case "average":
           {
-            const canvas = createCanvas(800, 600);
+            const canvas = createCanvas(1500, 600);
             const ctx = canvas.getContext("2d");
 
             const avatar = await loadImage(channel.avatar);
