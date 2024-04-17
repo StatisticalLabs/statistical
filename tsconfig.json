@@ -28,7 +28,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "config": ["config.ts"]
+      "config": ["src/utils/config/loader.ts"]
     }
   }
 }

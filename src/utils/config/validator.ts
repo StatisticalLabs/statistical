@@ -19,7 +19,7 @@ export type Config = Omit<z.infer<typeof configSchema>, "colors"> & {
   colors: Record<keyof z.infer<typeof configSchema>["colors"], ColorResolvable>;
 };
 
-import config from "../../config";
+import config from "config";
 const parsed = configSchema.safeParse(config);
 if (parsed.success === false) {
   console.error(
