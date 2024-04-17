@@ -1,11 +1,12 @@
+import type {
+  AutocompleteInteraction,
+  GuildMember} from "discord.js";
 import {
   ActionRowBuilder,
   AttachmentBuilder,
-  AutocompleteInteraction,
   ButtonBuilder,
   ButtonStyle,
-  EmbedBuilder,
-  GuildMember,
+  EmbedBuilder
 } from "discord.js";
 import { event } from "@/structures/event";
 import type { ExtendedChatInputCommandInteraction } from "@/structures/command";
@@ -69,7 +70,7 @@ export default event("interactionCreate", async (client, interaction) => {
     }
   } else if (interaction.isButton()) {
     if (interaction.customId.startsWith("image-")) {
-      let [
+      const [
         channelId,
         updateTimeAsNumber,
         timeTook,

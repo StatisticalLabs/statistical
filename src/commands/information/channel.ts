@@ -62,7 +62,7 @@ function calculateTimeUntilNextMilestone(stats: {
     stats.subscriberCount,
     isDecreasing,
   );
-  let neededSubsForNextMilestone = isDecreasing
+  const neededSubsForNextMilestone = isDecreasing
     ? stats.subscriberCount - nextMilestone
     : nextMilestone - stats.subscriberCount;
   const daysToNextMilestone =

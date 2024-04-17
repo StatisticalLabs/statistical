@@ -34,17 +34,17 @@ const abbreviate = (number: number, digits?: number) => {
   digits = digits ?? 3;
 
   const sign = Math.sign(number);
-  let num = Math.abs(number).toString();
-  let first = num.slice(0, digits);
-  let rest = num.slice(digits);
-  let abb = new Array(rest.length).fill(0).join("");
+  const num = Math.abs(number).toString();
+  const first = num.slice(0, digits);
+  const rest = num.slice(digits);
+  const abb = new Array(rest.length).fill(0).join("");
 
   return parseFloat(first + abb) * sign;
 };
 
 const abbreviateWithUnit = (number: number, digits?: number) => {
   digits = digits ?? 2;
-  let formatNumber = Intl.NumberFormat("en-US", {
+  const formatNumber = Intl.NumberFormat("en-US", {
     notation: "compact",
     maximumFractionDigits: digits,
   }).format(number);
@@ -58,10 +58,10 @@ const abbreviateAllInOne = (number: number, digits?: number) => {
 };
 
 const getMilestone = (number: number) => {
-  let num = number.toString();
-  let first = num[0];
-  let rest = num.slice(1);
-  let abb = new Array(rest.length).fill(0).join("");
+  const num = number.toString();
+  const first = num[0];
+  const rest = num.slice(1);
+  const abb = new Array(rest.length).fill(0).join("");
 
   return parseFloat(first + abb);
 };
@@ -86,15 +86,15 @@ export async function generateUpdateImage(d: {
     updateTime: rawUpdateTime,
     timeTook,
   } = d;
-  let avatar = await loadImage(d.avatar);
+  const avatar = await loadImage(d.avatar);
   const updateTime = new Date(
     rawUpdateTime.getTime() + rawUpdateTime.getTimezoneOffset() * 60000,
   );
-  let avg =
+  const avg =
     Math.abs(Math.round(d.dailyAVG)) < 10_000_000
       ? Math.round(d.dailyAVG)
       : abbreviateAllInOne(Math.round(d.dailyAVG), 5);
-  let countSize = subCount >= 100_000_000 ? "320px" : "350px";
+  const countSize = subCount >= 100_000_000 ? "320px" : "350px";
 
   const canvas = createCanvas(1920, 1080);
   const context = canvas.getContext("2d");
