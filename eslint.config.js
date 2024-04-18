@@ -1,11 +1,12 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
-import eslintConfigPrettier from "eslint-config-prettier";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 
 export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    files: ["**/*.js", "**/*.ts"],
     languageOptions: {
       parserOptions: {
         project: true,
@@ -13,6 +14,7 @@ export default tseslint.config(
       },
     },
     rules: {
+      "prettier/prettier": "error",
       quotes: ["error", "double", { avoidEscape: true }],
       semi: ["error", "always"],
       "quote-props": ["error", "as-needed"],
@@ -33,5 +35,5 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "off",
     },
   },
-  eslintConfigPrettier,
+  eslintPluginPrettierRecommended,
 );

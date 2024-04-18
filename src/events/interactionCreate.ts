@@ -1,12 +1,10 @@
-import type {
-  AutocompleteInteraction,
-  GuildMember} from "discord.js";
+import type { AutocompleteInteraction, GuildMember } from "discord.js";
 import {
   ActionRowBuilder,
   AttachmentBuilder,
   ButtonBuilder,
   ButtonStyle,
-  EmbedBuilder
+  EmbedBuilder,
 } from "discord.js";
 import { event } from "@/structures/event";
 import type { ExtendedChatInputCommandInteraction } from "@/structures/command";
