@@ -3,7 +3,7 @@ import { exists } from "fs/promises";
 
 export async function loadConfig(): Promise<Config> {
   if (await exists("./config.ts")) {
-    const { config } = require("../../config");
+    const config = await import("../../../config").then((x) => x?.default);
     return config;
   }
   throw new SyntaxError("No configuration file found");
