@@ -5,7 +5,8 @@ import { getYouTubeChannel, trackers, type YouTubeChannel } from "./db";
 export const channelAutocomplete = async (
   interaction: AutocompleteInteraction,
 ) => {
-  const focusedValue = interaction.options.getFocused() || "mrbeast";
+  const focusedValue = interaction.options.getFocused();
+  if (!focusedValue.length) return interaction.respond([]);
 
   const cachedSearchResults = await cache.get(
     "search_" + focusedValue.toLowerCase().replace(/ /g, "_"),
