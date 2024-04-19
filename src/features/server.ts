@@ -113,5 +113,5 @@ export default (client: BotClient<true>) => {
     fetch: app.fetch,
     port: env.API_PORT,
   });
-  console.log("Listening on port 3000.");
+  console.log(`Listening on port ${env.API_PORT}.`);
 };
