@@ -4,6 +4,7 @@ import { zValidator } from "@hono/zod-validator";
 import type { BotClient } from "@/structures/client";
 import {
   getYouTubeChannel,
+  trackers,
   youtubeChannels,
   type YouTubeChannel,
 } from "@/utils/db";
@@ -22,7 +23,7 @@ const formatChannel = (channel: YouTubeChannel) => ({
     : undefined,
 });
 
-export default (_client: BotClient<true>) => {
+export default (client: BotClient<true>) => {
   const app = new Hono();
 
   app.get("/", (c) =>
@@ -95,6 +96,17 @@ export default (_client: BotClient<true>) => {
     }
 
     return c.json({ ...formatChannel(dbChannel), previousUpdates });
+  });
+
+  app.get("/stats", (c) => {
+    const totalSubscribers = youtubeChannels
+      .map((c) => c.currentUpdate?.subscribers ?? 0)
+      .reduce((a, b) => a + b, 0);
+    return c.json({
+      servers: client.guilds.cache.size,
+      channelsTracked: trackers.length,
+      totalSubscribers,
+    });
   });
 
   Bun.serve({
