@@ -2,7 +2,7 @@ import { writeFile, exists, mkdir } from "fs/promises";
 import { join } from "path";
 
 class Cache {
-  path = "cache";
+  path = "data/cache";
   private memoryCache = new Map<string, string>();
 
   constructor(path?: string) {
