@@ -1,4 +1,4 @@
-import { writeFile } from "fs/promises";
+import { writeFile, exists, mkdir } from "fs/promises";
 import { join } from "path";
 
 class Cache {
@@ -7,7 +7,16 @@ class Cache {
 
   constructor(path?: string) {
     if (path) this.path = path;
+    this.checkPath();
     console.log("Initialized cache in path:", this.path + ".");
+  }
+
+  async checkPath() {
+    if (!(await exists(this.path))) {
+      console.log("No cache directory found. Creating cache directory...");
+      await mkdir(this.path);
+      console.log("Cache directory created.");
+    }
   }
 
   async get(key: string) {
