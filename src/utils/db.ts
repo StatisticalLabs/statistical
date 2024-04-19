@@ -40,15 +40,15 @@ async function checkIfDataExists() {
   }
 
   if (!(await exists("data/meta.json"))) {
-    console.log("No data directory found. Creating data directory...");
+    console.log("No meta.json found. Creating meta.json...");
     await writeFile(
       "data/meta.json",
       JSON.stringify({
         youtubeChannels: [],
-        subscriptions: [],
+        trackers: [],
       }),
     );
-    console.log("Data directory created.");
+    console.log("meta.json created.");
   }
 }
 
