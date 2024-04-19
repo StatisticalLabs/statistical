@@ -107,9 +107,6 @@ web_modules/
 .env.production.local
 .env.local
 
-# config file
-/config.ts
-
 # parcel-bundler cache (https://parceljs.org/)
 
 .parcel-cache

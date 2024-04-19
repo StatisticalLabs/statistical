@@ -1,5 +1,5 @@
 import "./utils/env";
-import "./utils/config/validator";
+import "./utils/config";
 
 import { GlobalFonts } from "@napi-rs/canvas";
 

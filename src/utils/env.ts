@@ -5,6 +5,7 @@ export const env = createEnv({
   server: {
     DISCORD_TOKEN: z.string(),
     API_PORT: z.coerce.number().default(3000),
+    NODE_ENV: z.enum(["development", "production"]).default("development"),
   },
   clientPrefix: undefined,
   runtimeEnv: Bun.env,
