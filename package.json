@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "turbo dev",
     "start": "turbo start",
+    "build": "turbo build",
     "typecheck": "turbo typecheck",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
