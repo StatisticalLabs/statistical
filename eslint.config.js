@@ -1,6 +1,7 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import nextjsConfig from "eslint-config-neon/flat/next.js";
 
 /** @type {import("typescript-eslint").ConfigWithExtends} */
 const baseConfig = {
@@ -39,11 +40,22 @@ const botConfig = {
 };
 
 export default tseslint.config(
+  {
+    ignores: ["**/node_modules/", ".git/", "**/.next/"],
+  },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
     files: ["apps/bot/**/*.ts"],
     ...botConfig,
+  },
+  {
+    files: ["apps/web/**/*.{ts,tsx,js,jsx}"],
+    ...nextjsConfig[0],
+    rules: {
+      ...nextjsConfig[0].rules,
+      "@next/next/no-duplicate-head": 0,
+    },
   },
   eslintPluginPrettierRecommended,
 );
