@@ -5,13 +5,13 @@
       "cache": false,
       "persistent": true
     },
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", ".contentlayer/**"]
-    },
     "start": {
       "cache": false,
       "persistent": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", ".contentlayer/**"]
     },
     "typecheck": {}
   }
