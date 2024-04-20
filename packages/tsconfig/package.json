@@ -1,0 +1,11 @@
+{
+  "name": "@statistical/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "files": [
+    "base.json"
+  ],
+  "devDependencies": {
+    "@types/bun": "^1.1.0"
+  }
+}

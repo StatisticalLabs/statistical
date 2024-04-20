@@ -1,0 +1,3 @@
+{
+  "extends": "@statistical/tsconfig/base.json"
+}

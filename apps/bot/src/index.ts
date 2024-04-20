@@ -1,4 +1,4 @@
-import "@statistical/config/env/bot";
+import "@statistical/env/bot";
 import "@statistical/config";
 
 import { GlobalFonts } from "@napi-rs/canvas";
