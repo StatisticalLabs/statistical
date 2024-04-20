@@ -3,8 +3,12 @@
   "version": "0.0.0",
   "module": "src/index.ts",
   "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "devDependencies": {
     "@statistical/tsconfig": "workspace:*",
+    "typescript": "^5.4.5",
     "zod": "^3.22.5"
   }
 }

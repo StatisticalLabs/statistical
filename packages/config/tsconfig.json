@@ -1,3 +1,4 @@
 {
-  "extends": "@statistical/tsconfig/base.json"
+  "extends": "@statistical/tsconfig/base.json",
+  "include": ["./index.ts", "../../config.ts"]
 }
