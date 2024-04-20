@@ -1,5 +1,6 @@
 import { exists, mkdir, writeFile } from "fs/promises";
 import { createId } from "@paralleldrive/cuid2";
+import { DATA_DIRECTORY } from "@/constants";
 
 export interface Meta {
   youtubeChannels: YouTubeChannel[];
@@ -33,16 +34,16 @@ export interface Tracker {
 }
 
 async function checkIfDataExists() {
-  if (!(await exists("data"))) {
+  if (!(await exists(DATA_DIRECTORY))) {
     console.log("No data directory found. Creating data directory...");
-    await mkdir("data");
+    await mkdir("../../data");
     console.log("Data directory created.");
   }
 
-  if (!(await exists("data/meta.json"))) {
+  if (!(await exists(`${DATA_DIRECTORY}/meta.json`))) {
     console.log("No meta.json found. Creating meta.json...");
     await writeFile(
-      "data/meta.json",
+      "../../data/meta.json",
       JSON.stringify({
         youtubeChannels: [],
         trackers: [],
@@ -54,7 +55,7 @@ async function checkIfDataExists() {
 
 await checkIfDataExists();
 
-const metaFile = Bun.file("data/meta.json");
+const metaFile = Bun.file(`${DATA_DIRECTORY}/meta.json`);
 const { youtubeChannels, trackers } = (await JSON.parse(
   Buffer.from(await metaFile.arrayBuffer()).toString(),
 )) as Meta;
@@ -77,6 +78,30 @@ function findTracker(youtubeChannelId: string, channelId: string) {
       record.channelId === channelId &&
       record.youtubeChannelId === youtubeChannelId,
   );
+}
+
+async function getPreviousUpdates(channelId: string) {
+  const previousUpdatesFile = Bun.file(
+    `${DATA_DIRECTORY}/history/${channelId}.csv`,
+  );
+  if (previousUpdatesFile.size === 0) return [];
+  else {
+    const lines = (await previousUpdatesFile.text()).split("\n");
+    lines.splice(0, 1);
+    return lines
+      .map((line) => {
+        const [date, subscribers, average] = line.split(",");
+        return {
+          timeHit: new Date(date),
+          subscribers: parseFloat(subscribers),
+          subscriberRate: parseFloat(average),
+        };
+      })
+      .filter(
+        ({ timeHit: date, subscribers, subscriberRate: average }) =>
+          !isNaN(date.getTime()) && !isNaN(subscribers) && !isNaN(average),
+      );
+  }
 }
 
 function subscribe(options: {
@@ -142,7 +167,7 @@ async function refreshFile() {
     lastSaveTime = start;
     updatePossible = false;
     const data = JSON.stringify({ youtubeChannels, trackers });
-    await Bun.write("data/meta.json", data);
+    await Bun.write(`${DATA_DIRECTORY}/meta.json`, data);
   } catch (err) {
     console.error(err);
   } finally {
@@ -170,6 +195,7 @@ export {
   trackers,
   getYouTubeChannel,
   getYouTubeChannelIndex,
+  getPreviousUpdates,
   isTracking,
   subscribe,
   unsubscribe,

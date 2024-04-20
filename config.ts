@@ -1,5 +1,5 @@
-import { env } from "./src/utils/env";
-import type { Config } from "./src/utils/config";
+import { botEnv as env } from "@statistical/config/env";
+import type { Config } from "@statistical/config";
 
 export default {
   // The server ID where commands will be registered.

@@ -11,7 +11,12 @@ import type { ExtendedChatInputCommandInteraction } from "@/structures/command";
 import config from "config";
 import { cache } from "@/utils/cache";
 import { getChannel, type YouTubeChannel } from "@/utils/youtube";
-import { getYouTubeChannel, isTracking, unsubscribe } from "@/utils/db";
+import {
+  getPreviousUpdates,
+  getYouTubeChannel,
+  isTracking,
+  unsubscribe,
+} from "@/utils/db";
 import { generateUpdateImage } from "@/utils/image";
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { Chart, registerables } from "chart.js";
@@ -159,8 +164,8 @@ export default event("interactionCreate", async (client, interaction) => {
           ],
         });
 
-      const previousUpdatesFile = Bun.file(`data/history/${channelId}.csv`);
-      if (previousUpdatesFile.size === 0)
+      const previousUpdates = await getPreviousUpdates(channelId);
+      if (!previousUpdates.length)
         return interaction.followUp({
           embeds: [
             new EmbedBuilder()
@@ -169,17 +174,6 @@ export default event("interactionCreate", async (client, interaction) => {
               .setColor(config.colors.danger),
           ],
         });
-      const lines = (await previousUpdatesFile.text()).split("\n");
-      lines.splice(0, 1);
-      const previousUpdates = (
-        lines.map((line) => {
-          const [date, subscribers, average] = line.split(",");
-          return [new Date(date), parseInt(subscribers), parseInt(average)];
-        }) as [Date, number, number][]
-      ).filter(
-        ([date, subscribers, average]) =>
-          !isNaN(date.getTime()) && !isNaN(subscribers) && !isNaN(average),
-      );
 
       switch (type) {
         default:
@@ -215,11 +209,11 @@ export default event("interactionCreate", async (client, interaction) => {
             const chart = new Chart(
               ctx,
               graphConfiguration(`Subscribers for ${channel.name}`, {
-                labels: previousUpdates.map(([date]) => date),
+                labels: previousUpdates.map(({ timeHit }) => timeHit),
                 datasets: [
                   {
                     label: channel.name,
-                    data: previousUpdates.map(([, subscribers]) => subscribers),
+                    data: previousUpdates.map(({ subscribers }) => subscribers),
                     backgroundColor: `rgb(${avatarData[0]}, ${avatarData[1]}, ${avatarData[2]})`,
                     borderColor: `rgb(${avatarData[0]}, ${avatarData[1]}, ${avatarData[2]})`,
                     tension: 0.1,
@@ -256,11 +250,13 @@ export default event("interactionCreate", async (client, interaction) => {
             const chart = new Chart(
               ctx,
               graphConfiguration(`Subscribers/day for ${channel.name}`, {
-                labels: previousUpdates.map(([date]) => date),
+                labels: previousUpdates.map(({ timeHit }) => timeHit),
                 datasets: [
                   {
                     label: channel.name,
-                    data: previousUpdates.map(([, , average]) => average),
+                    data: previousUpdates.map(
+                      ({ subscriberRate }) => subscriberRate,
+                    ),
                     backgroundColor: `rgb(${avatarData[0]}, ${avatarData[1]}, ${avatarData[2]})`,
                     borderColor: `rgb(${avatarData[0]}, ${avatarData[1]}, ${avatarData[2]})`,
                     tension: 0.1,

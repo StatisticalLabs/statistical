@@ -13,6 +13,7 @@ import { abbreviate } from "@/utils/abbreviate";
 import { cache } from "@/utils/cache";
 import { gain } from "@/utils/gain";
 import { readdir, mkdir, appendFile } from "fs/promises";
+import { DATA_DIRECTORY } from "@/constants";
 
 interface Message {
   pingRoleId?: string;
@@ -114,14 +115,14 @@ async function checkForUpdates(client: BotClient<true>) {
           await cache.set(channel.id, JSON.stringify(channel));
 
           if (!dirExists) {
-            const checkIfExists = await readdir("data");
+            const checkIfExists = await readdir(`${DATA_DIRECTORY}/history`);
             if (checkIfExists.findIndex((a) => a == "history") == -1)
-              await mkdir("data/history");
+              await mkdir(`${DATA_DIRECTORY}/history`);
             dirExists = true;
           }
 
           await appendFile(
-            "data/history/" + channel.id + ".csv",
+            `${DATA_DIRECTORY}/history/${channel.id}.csv`,
             `\n${currentDate.toISOString()},${channel.subscribers},${subscriberRate * (60 * 60 * 24)}`,
           );
 
