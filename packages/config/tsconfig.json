@@ -22,13 +22,6 @@
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false,
-
-    // Paths
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "config": ["config.ts"]
-    }
+    "noPropertyAccessFromIndexSignature": false
   }
 }

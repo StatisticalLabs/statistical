@@ -3,12 +3,13 @@ import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import type { BotClient } from "@/structures/client";
 import {
+  getPreviousUpdates,
   getYouTubeChannel,
   trackers,
   youtubeChannels,
   type YouTubeChannel,
 } from "@/utils/db";
-import { env } from "@/utils/env";
+import { botEnv as env } from "@statistical/config/env";
 
 const formatChannel = (channel: YouTubeChannel) => ({
   id: channel.id,
@@ -70,32 +71,10 @@ export default (client: BotClient<true>) => {
     const dbChannel = getYouTubeChannel(id);
     if (!dbChannel) return c.json({ error: "Channel not found" }, 404);
 
-    let previousUpdates: {
-      timeHit: Date;
-      subscribers: number;
-      subscriberRate: number;
-    }[] = [];
-    const previousUpdatesFile = Bun.file(`./data/history/${id}.csv`);
-    if (previousUpdatesFile.size === 0) previousUpdates = [];
-    else {
-      const lines = (await previousUpdatesFile.text()).split("\n");
-      lines.splice(0, 1);
-      previousUpdates = lines
-        .map((line) => {
-          const [date, subscribers, average] = line.split(",");
-          return {
-            timeHit: new Date(date),
-            subscribers: parseFloat(subscribers),
-            subscriberRate: parseFloat(average),
-          };
-        })
-        .filter(
-          ({ timeHit: date, subscribers, subscriberRate: average }) =>
-            !isNaN(date.getTime()) && !isNaN(subscribers) && !isNaN(average),
-        );
-    }
-
-    return c.json({ ...formatChannel(dbChannel), previousUpdates });
+    return c.json({
+      ...formatChannel(dbChannel),
+      previousUpdates: await getPreviousUpdates(id),
+    });
   });
 
   app.get("/stats", (c) => {

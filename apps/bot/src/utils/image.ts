@@ -1,6 +1,7 @@
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import { createId } from "@paralleldrive/cuid2";
+import { ASSETS_DIRECTORY } from "@/constants";
 
 const rgbToHex = (r: any, g: any, b: any) =>
   "#" +
@@ -110,11 +111,11 @@ export async function generateUpdateImage(d: {
   context.fillStyle = grd;
   context.fillRect(0, 0, 1920, 1080);
 
-  const botWatermark = await loadImage("./assets/botWatermark.png");
+  const botWatermark = await loadImage(`${ASSETS_DIRECTORY}/botWatermark.png`);
 
   if (getMilestone(subCount) == subCount) {
     const milestoneBackground = await loadImage(
-      "./assets/milestoneBackground.png",
+      `${ASSETS_DIRECTORY}/milestoneBackground.png`,
     );
 
     context.globalAlpha = 0.3;

@@ -4,7 +4,7 @@ import {
   type ApplicationCommandDataResolvable,
 } from "discord.js";
 import { botOptions } from "@/utils/bot-options";
-import { env } from "@/utils/env";
+import { botEnv as env } from "@statistical/config/env";
 import { readdir } from "fs/promises";
 import path from "path";
 import type { Command } from "./command";
