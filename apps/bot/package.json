@@ -21,7 +21,11 @@
     "hono": "^4.2.4"
   },
   "devDependencies": {
+    "@statistical/env": "workspace:*",
+    "@statistical/tsconfig": "workspace:*",
     "@types/bun": "latest",
-    "dotenv-cli": "^7.4.1"
+    "dotenv-cli": "^7.4.1",
+    "nodemon": "^3.1.0",
+    "typescript": "^5.4.5"
   }
 }

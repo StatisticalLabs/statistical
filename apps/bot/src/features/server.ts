@@ -9,7 +9,7 @@ import {
   youtubeChannels,
   type YouTubeChannel,
 } from "@/utils/db";
-import { botEnv as env } from "@statistical/config/env";
+import { botEnv as env } from "@statistical/env";
 
 const formatChannel = (channel: YouTubeChannel) => ({
   id: channel.id,
