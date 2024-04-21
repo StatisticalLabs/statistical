@@ -137,14 +137,12 @@ async function main() {
         },
       });
     else {
-      if (!dbChannel.currentUpdate)
-        dbChannel.currentUpdate = {
-          subscribers: parseInt(channel.subscribers.toString()),
-          timeHit: channel.subscriber_hit,
-          duration: 0,
-          subscriberRate:
-            parseInt(channel.sub_rate.toString()) / (60 * 60 * 24),
-        };
+      dbChannel.currentUpdate = {
+        subscribers: parseInt(channel.subscribers.toString()),
+        timeHit: channel.subscriber_hit,
+        duration: 0,
+        subscriberRate: parseInt(channel.sub_rate.toString()) / (60 * 60 * 24),
+      };
     }
 
     if (await exists(`${DATA_DIRECTORY}/history/${channel.channel_id}.csv`))
