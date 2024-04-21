@@ -43,6 +43,5 @@ out
 # vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
+# Next.js TypeScript
 next-env.d.ts
