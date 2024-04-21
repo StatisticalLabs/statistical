@@ -14,10 +14,10 @@ export function Stat({
   count?: number;
 }) {
   return (
-    <div className="flex w-[292px] items-center gap-4 rounded-lg border px-6 py-4">
+    <div className="flex items-center gap-4 rounded-lg border px-6 py-4">
       {Icon}
       <div className="flex-grow">
-        {count ? (
+        {count || count === 0 ? (
           <CountUp end={count} delay={0}>
             {({ countUpRef }) => (
               <span className="text-2xl font-bold" ref={countUpRef} />

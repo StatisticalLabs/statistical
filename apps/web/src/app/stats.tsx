@@ -18,10 +18,10 @@ export async function Stats() {
 
   return (
     <section className="flex flex-col items-center justify-center gap-6 pt-12">
-      <h2 className="text-4xl font-bold tracking-tight">
+      <h2 className="text-center text-4xl font-bold tracking-tight">
         Numbers speak louder than words
       </h2>
-      <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="flex flex-wrap items-center justify-center gap-6">
         <Stat
           name="Servers"
           icon={
