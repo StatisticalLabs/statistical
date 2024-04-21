@@ -3,11 +3,13 @@ import subscriberUpdate from "../../public/update.png";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import { CardContent, Card } from "@/components/ui/card";
+import { Server, Tv, Users } from "lucide-react";
 
 export default function Home() {
   return (
-    <>
-      <section className="container flex flex-col items-center justify-center py-6">
+    <div className="container py-6">
+      <section className="flex flex-col items-center justify-center">
         <div className="flex flex-col items-center justify-center gap-2 text-center">
           <h1 className="w-full max-w-lg text-balance text-5xl font-bold tracking-tight">
             Track your favorite channels{" "}
@@ -61,7 +63,41 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </>
+      <section className="flex flex-col items-center justify-center gap-6 pt-12">
+        <h2 className="text-4xl font-bold tracking-tight">
+          Numbers speak louder than words
+        </h2>
+        <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="flex items-center gap-4 rounded-lg border px-6 py-4">
+            <Server className="h-10 w-10 text-gray-500 dark:text-gray-400" />
+            <div>
+              <h3 className="text-2xl font-bold">12,345</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Servers
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 rounded-lg border px-6 py-4">
+            <Tv className="h-10 w-10 text-gray-500 dark:text-gray-400" />
+            <div>
+              <h3 className="text-2xl font-bold">98,765</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Channels tracked
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 border px-6 py-4">
+            <Users className="h-10 w-10 text-gray-500 dark:text-gray-400" />
+            <div>
+              <h3 className="text-2xl font-bold">1,234,567</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Total Subscribers
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 
