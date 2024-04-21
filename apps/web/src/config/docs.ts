@@ -13,9 +13,14 @@ export const docsConfig: DocsConfig = {
           title: "Introduction",
           href: "/docs",
         },
+      ],
+    },
+    {
+      title: "Tracking",
+      items: [
         {
-          title: "Inviting Statistical",
-          href: "/docs/invite",
+          title: "Start tracking",
+          href: "/docs/tracking",
         },
       ],
     },
