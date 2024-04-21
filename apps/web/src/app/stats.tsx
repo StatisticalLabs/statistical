@@ -1,6 +1,5 @@
 import { Server, Tv, Users } from "lucide-react";
 import { unstable_noStore } from "next/cache";
-import { Skeleton } from "../components/ui/skeleton";
 import { webEnv as env } from "@statistical/env/web";
 import { Stat } from "./stat";
 import Link from "next/link";
