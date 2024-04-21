@@ -52,7 +52,7 @@ export const graphOptions = (
     },
     credits: {
       enabled: true,
-      text: "Countify",
+      text: "Statistical",
       href: "/",
     },
     tooltip: {
