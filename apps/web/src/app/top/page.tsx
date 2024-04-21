@@ -1,7 +1,6 @@
 import { webEnv as env } from "@statistical/env/web";
-import Image from "next/image";
-import Link from "next/link";
 import { Channels } from "./channels";
+import { Metadata } from "next";
 
 interface TopAPIResponse {
   totalPages: number;
@@ -20,6 +19,11 @@ export interface Channel {
     subscriberRate: number;
   };
 }
+
+export const metadata: Metadata = {
+  title: "Top Channels",
+  description: "View the top channels through Statistical.",
+};
 
 export const revalidate = 3600;
 

@@ -3,6 +3,21 @@ import { webEnv as env } from "@statistical/env/web";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Chart } from "./chart";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Record<"channelId", string>;
+}): Promise<Metadata> {
+  const res = await fetch(`${env.API_URL}/channels/${params.channelId}`);
+  const data = await res.json();
+
+  return {
+    title: `${data.name} Analytics`,
+    description: `View the anayltics of ${data.name} through Statistical.`,
+  };
+}
 
 export default async function Analytics({
   params,
