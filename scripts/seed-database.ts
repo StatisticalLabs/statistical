@@ -128,6 +128,13 @@ async function main() {
           channel.yt.thumbnailDetails.thumbnails[1].url ??
           channel.yt.thumbnailDetails.thumbnails[0].url,
         trackers: [],
+        currentUpdate: {
+          subscribers: parseInt(channel.subscribers.toString()),
+          timeHit: channel.subscriber_hit,
+          duration: 0,
+          subscriberRate:
+            parseInt(channel.sub_rate.toString()) / (60 * 60 * 24),
+        },
       });
     else {
       if (!dbChannel.currentUpdate)
@@ -135,9 +142,13 @@ async function main() {
           subscribers: parseInt(channel.subscribers.toString()),
           timeHit: channel.subscriber_hit,
           duration: 0,
-          subscriberRate: parseInt(channel.sub_rate.toString()),
+          subscriberRate:
+            parseInt(channel.sub_rate.toString()) / (60 * 60 * 24),
         };
     }
+
+    if (await exists(`${DATA_DIRECTORY}/history/${channel.channel_id}.csv`))
+      continue;
 
     console.log(`Fetching analytics for ${channel.yt.title}...`);
 
