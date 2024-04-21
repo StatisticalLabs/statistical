@@ -41,7 +41,13 @@ const botConfig = {
 
 export default tseslint.config(
   {
-    ignores: ["**/node_modules/", ".git/", "**/.next/"],
+    ignores: [
+      "**/node_modules/",
+      ".git/",
+      "**/.next/",
+      "apps/web/src/components/ui/**",
+      "apps/web/.contentlayer/**",
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
