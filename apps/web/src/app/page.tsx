@@ -7,16 +7,16 @@ import { siteConfig } from "@/config/site";
 export default function Home() {
   return (
     <>
-      <section className="flex flex-col items-center justify-center py-6 container">
-        <div className="flex flex-col items-center justify-center text-center gap-2">
-          <h1 className="text-balance text-5xl font-bold tracking-tight max-w-lg w-full">
+      <section className="container flex flex-col items-center justify-center py-6">
+        <div className="flex flex-col items-center justify-center gap-2 text-center">
+          <h1 className="w-full max-w-lg text-balance text-5xl font-bold tracking-tight">
             Track your favorite channels{" "}
-            <span className="text-green-500 relative whitespace-nowrap italic">
+            <span className="relative whitespace-nowrap italic text-green-500">
               in realtime
               <SquigglyLines />
             </span>
           </h1>
-          <p className="text-muted-foreground text-xs sm:text-sm md:text-base text-pretty w-full max-w-2xl">
+          <p className="w-full max-w-2xl text-pretty text-xs text-muted-foreground sm:text-sm md:text-base">
             Get immediate updates when your favorite channel gets a new
             subscriber update.
           </p>
@@ -51,7 +51,7 @@ export default function Home() {
         </div>
         <div className="p-3" />
         <div className="relative mx-auto">
-          <span className="absolute -inset-0.5 bg-[#323339] blur-lg -z-10" />
+          <span className="absolute -inset-0.5 -z-10 bg-[#323339] blur-lg" />
           <div className="relative overflow-hidden rounded-lg bg-[#323339]">
             <Image
               src={subscriberUpdate}

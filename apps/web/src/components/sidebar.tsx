@@ -35,15 +35,15 @@ function DocsSidebarItems({
   pathname: string;
 }) {
   return (
-    <div className="grid grid-flow-row auto-rows-max text-sm gap-1">
+    <div className="grid grid-flow-row auto-rows-max gap-1 text-sm">
       {items.map((item, index) => (
         <Link
           key={index}
           href={item.href}
           className={cn(
-            "px-2 py-1 rounded transition-colors",
+            "rounded px-2 py-1 transition-colors",
             pathname === item.href
-              ? "font-medium text-foreground bg-muted"
+              ? "bg-muted font-medium text-foreground"
               : "text-muted-foreground hover:bg-muted/70 hover:text-white",
           )}
         >
