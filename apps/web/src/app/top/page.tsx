@@ -9,6 +9,7 @@ interface TopAPIResponse {
 }
 
 export interface Channel {
+  rank: number;
   id: string;
   name: string;
   handle?: string;

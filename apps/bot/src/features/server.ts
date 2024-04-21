@@ -57,7 +57,10 @@ export default (client: BotClient<true>) => {
             : (b.currentUpdate?.subscribers ?? 0) -
               (a.currentUpdate?.subscribers ?? 0),
         )
-        .map(formatChannel);
+        .map((channel, index) => ({
+          rank: index + 1,
+          ...formatChannel(channel),
+        }));
       const paginatedChannels = sortedChannels.slice(startIndex, endIndex);
       const totalPages = Math.ceil(sortedChannels.length / pageSize);
 

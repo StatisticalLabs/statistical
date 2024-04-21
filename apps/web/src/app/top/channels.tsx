@@ -54,7 +54,7 @@ export function Channels({
                   className={index % 2 !== 0 ? "bg-muted/30" : ""}
                 >
                   <TableCell className="text-center font-medium">
-                    {index + 1}
+                    {channel.rank}
                   </TableCell>
                   <TableCell className="font-medium">
                     <Link href={`/analytics/${channel.id}`}>
