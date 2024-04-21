@@ -81,6 +81,25 @@ function findTracker(youtubeChannelId: string, channelId: string) {
   );
 }
 
+function filterData(
+  datapoints: { timeHit: Date; subscribers: number; subscriberRate: number }[],
+) {
+  const filteredDatapoints = [];
+  const seenSubscriberCounts = new Map();
+  for (let i = 0; i < datapoints.length; i++) {
+    const currentSubscribers = datapoints[i].subscribers;
+    const currentSubscriberRate = datapoints[i].subscriberRate;
+    if (!seenSubscriberCounts.has(currentSubscribers)) {
+      filteredDatapoints.push(datapoints[i]);
+      seenSubscriberCounts.set(currentSubscribers, currentSubscriberRate);
+    } else {
+      datapoints[i].subscriberRate =
+        seenSubscriberCounts.get(currentSubscribers);
+    }
+  }
+  return filteredDatapoints;
+}
+
 async function getPreviousUpdates(channelId: string) {
   const previousUpdatesFile = Bun.file(
     `${DATA_DIRECTORY}/history/${channelId}.csv`,
@@ -89,7 +108,7 @@ async function getPreviousUpdates(channelId: string) {
   else {
     const lines = (await previousUpdatesFile.text()).split("\n");
     lines.splice(0, 1);
-    return lines
+    const datapoints = lines
       .map((line) => {
         const [date, subscribers, average] = line.split(",");
         return {
@@ -102,6 +121,7 @@ async function getPreviousUpdates(channelId: string) {
         ({ timeHit: date, subscribers, subscriberRate: average }) =>
           !isNaN(date.getTime()) && !isNaN(subscribers) && !isNaN(average),
       );
+    return filterData(datapoints);
   }
 }
 
