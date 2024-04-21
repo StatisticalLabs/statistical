@@ -12,7 +12,7 @@ import { getChannels } from "@/utils/youtube";
 import { abbreviate } from "@/utils/abbreviate";
 import { cache } from "@/utils/cache";
 import { gain } from "@/utils/gain";
-import { readdir, mkdir, appendFile } from "fs/promises";
+import { readdir, mkdir, appendFile, exists } from "fs/promises";
 import { DATA_DIRECTORY } from "@/constants";
 
 interface Message {
@@ -115,8 +115,7 @@ async function checkForUpdates(client: BotClient<true>) {
           await cache.set(channel.id, JSON.stringify(channel));
 
           if (!dirExists) {
-            const checkIfExists = await readdir(`${DATA_DIRECTORY}/history`);
-            if (checkIfExists.findIndex((a) => a == "history") == -1)
+            if (!exists(`${DATA_DIRECTORY}/history`))
               await mkdir(`${DATA_DIRECTORY}/history`);
             dirExists = true;
           }
