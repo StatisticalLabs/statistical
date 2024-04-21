@@ -91,6 +91,7 @@ export default {
     subscribe({
       name: channel.name,
       handle: channel.handle,
+      avatar: channel.avatar,
       youtubeChannelId: channelId,
       channelId: textChannel.id,
       userId: interaction.user.id,

@@ -17,6 +17,7 @@ const formatChannel = (channel: YouTubeChannel) => ({
   id: channel.id,
   name: channel.name,
   handle: channel.handle,
+  avatar: channel.avatar,
   lastUpdate: channel.currentUpdate
     ? {
         timeHit: channel.currentUpdate.timeHit,
@@ -35,13 +36,13 @@ export default (client: BotClient<true>) => {
     }),
   );
 
-  const pageSize = 10;
+  const pageSize = 50;
   app.get(
     "/channels",
     zValidator(
       "query",
       z.object({
-        page: z.number().optional(),
+        page: z.coerce.number().optional(),
         sort: z.enum(["name", "subscribers"]).optional(),
       }),
     ),
@@ -88,6 +89,7 @@ export default (client: BotClient<true>) => {
         id,
         name: channel.name,
         handle: channel.handle,
+        avatar: channel.avatar,
         trackers: [],
       } satisfies YouTubeChannel;
       youtubeChannels.push(newEntry);
@@ -96,7 +98,6 @@ export default (client: BotClient<true>) => {
 
     return c.json({
       ...formatChannel(dbChannel),
-      avatar: channel.avatar,
       lastUpdate: undefined,
       subscribers: dbChannel?.currentUpdate?.subscribers ?? channel.subscribers,
       views: channel.views,

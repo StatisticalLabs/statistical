@@ -32,5 +32,9 @@ export const siteConfig: SiteConfig = {
       title: "Analytics",
       href: "/analytics",
     },
+    {
+      title: "Top",
+      href: "/top",
+    },
   ],
 };
