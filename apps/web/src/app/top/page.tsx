@@ -47,7 +47,11 @@ export default async function Top({
         <div className="flex items-center gap-2.5">
           <h1 className="text-2xl font-bold tracking-tight">Top Channels</h1>
         </div>
-        <Channels channels={data.channels} />
+        <Channels
+          currentPage={page}
+          totalPages={data.totalPages}
+          channels={data.channels}
+        />
       </div>
     </section>
   );
