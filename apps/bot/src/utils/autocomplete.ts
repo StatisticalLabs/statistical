@@ -50,7 +50,7 @@ export const trackedChannelAutocomplete = async (
       value: channel.id,
     }));
   const filtered = channels.filter((channel) =>
-    channel.name.includes(focusedValue.toLowerCase()),
+    channel.name.toLowerCase().includes(focusedValue.toLowerCase()),
   );
   await interaction.respond(filtered);
 };
