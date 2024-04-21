@@ -80,7 +80,7 @@
   font-weight: 500;
   padding-inline-start: 0.3em;
   opacity: 0;
-  @apply transition-all text-muted-foreground/50;
+  @apply transition-all text-muted-foreground/80;
 }
 .heading-link:hover::after {
   opacity: 1;
