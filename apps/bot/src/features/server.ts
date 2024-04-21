@@ -10,6 +10,8 @@ import {
   type YouTubeChannel,
 } from "@/utils/db";
 import { botEnv as env } from "@statistical/env";
+import { cache } from "@/utils/cache";
+import { getChannel, type YouTubeChannel as Channel } from "@/utils/youtube";
 
 const formatChannel = (channel: YouTubeChannel) => ({
   id: channel.id,
@@ -68,11 +70,37 @@ export default (client: BotClient<true>) => {
 
   app.get("/channels/:id", async (c) => {
     const id = c.req.param("id");
-    const dbChannel = getYouTubeChannel(id);
-    if (!dbChannel) return c.json({ error: "Channel not found" }, 404);
+
+    const cachedChannel = await cache.get(id).catch(() => null);
+    let channel = cachedChannel
+      ? ((await JSON.parse(cachedChannel)) as Channel)
+      : null;
+    if (!channel) {
+      const channelFromYouTube = await getChannel(id);
+      channel = channelFromYouTube;
+      if (channel) await cache.set(id, JSON.stringify(channel));
+    }
+    if (!channel) return c.json({ error: "Channel not found" }, 404);
+
+    let dbChannel = getYouTubeChannel(id);
+    if (!dbChannel) {
+      const newEntry = {
+        id,
+        name: channel.name,
+        handle: channel.handle,
+        trackers: [],
+      } satisfies YouTubeChannel;
+      youtubeChannels.push(newEntry);
+      dbChannel = newEntry;
+    }
 
     return c.json({
       ...formatChannel(dbChannel),
+      avatar: channel.avatar,
+      lastUpdate: undefined,
+      subscribers: dbChannel?.currentUpdate?.subscribers ?? channel.subscribers,
+      views: channel.views,
+      videos: channel.videos,
       previousUpdates: await getPreviousUpdates(id),
     });
   });
