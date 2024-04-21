@@ -115,7 +115,7 @@ export default (client: BotClient<true>) => {
       .reduce((a, b) => a + b, 0);
     return c.json({
       servers: client.guilds.cache.size,
-      channelsTracked: trackers.length,
+      channelsTracked: youtubeChannels.length,
       totalSubscribers,
     });
   });
