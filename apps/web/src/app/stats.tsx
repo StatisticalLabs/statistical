@@ -2,6 +2,7 @@ import { Server, Tv, Users } from "lucide-react";
 import { unstable_noStore } from "next/cache";
 import { Skeleton } from "../components/ui/skeleton";
 import { webEnv as env } from "@statistical/env/web";
+import { Stat } from "./stat";
 
 interface Stats {
   servers: number;
@@ -25,37 +26,25 @@ export async function Stats() {
         Numbers speak louder than words
       </h2>
       <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="flex items-center gap-4 rounded-lg border px-6 py-4">
-          <Server className="h-10 w-10 text-gray-500 dark:text-gray-400" />
-          <div>
-            <h3 className="text-2xl font-bold">
-              {stats.servers.toLocaleString()}
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Servers</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-4 rounded-lg border px-6 py-4">
-          <Tv className="h-10 w-10 text-gray-500 dark:text-gray-400" />
-          <div>
-            <h3 className="text-2xl font-bold">
-              {stats.channelsTracked.toLocaleString()}
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Channels tracked
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-4 border px-6 py-4">
-          <Users className="h-10 w-10 text-gray-500 dark:text-gray-400" />
-          <div>
-            <h3 className="text-2xl font-bold">
-              {stats.totalSubscribers.toLocaleString()}
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Total Subscribers
-            </p>
-          </div>
-        </div>
+        <Stat
+          name="Servers"
+          icon={
+            <Server className="h-10 w-10 text-gray-500 dark:text-gray-400" />
+          }
+          count={stats.servers}
+        />
+        <Stat
+          name="Channels tracked"
+          icon={<Tv className="h-10 w-10 text-gray-500 dark:text-gray-400" />}
+          count={stats.channelsTracked}
+        />
+        <Stat
+          name="Total subscribers"
+          icon={
+            <Users className="h-10 w-10 text-gray-500 dark:text-gray-400" />
+          }
+          count={stats.totalSubscribers}
+        />
       </div>
     </section>
   );
@@ -68,31 +57,22 @@ export function StatsFallback() {
         Numbers speak louder than words
       </h2>
       <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="flex items-center gap-4 rounded-lg border px-6 py-4">
-          <Server className="h-10 w-10 text-gray-500 dark:text-gray-400" />
-          <div className="flex-grow">
-            <Skeleton className="h-8 w-full" />
-            <p className="text-sm text-gray-500 dark:text-gray-400">Servers</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-4 rounded-lg border px-6 py-4">
-          <Tv className="h-10 w-10 text-gray-500 dark:text-gray-400" />
-          <div className="flex-grow">
-            <Skeleton className="h-8 w-full" />
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Channels tracked
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-4 border px-6 py-4">
-          <Users className="h-10 w-10 text-gray-500 dark:text-gray-400" />
-          <div className="flex-grow">
-            <Skeleton className="h-8 w-full" />
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Total Subscribers
-            </p>
-          </div>
-        </div>
+        <Stat
+          name="Servers"
+          icon={
+            <Server className="h-10 w-10 text-gray-500 dark:text-gray-400" />
+          }
+        />
+        <Stat
+          name="Channels tracked"
+          icon={<Tv className="h-10 w-10 text-gray-500 dark:text-gray-400" />}
+        />
+        <Stat
+          name="Total subscribers"
+          icon={
+            <Users className="h-10 w-10 text-gray-500 dark:text-gray-400" />
+          }
+        />
       </div>
     </section>
   );
