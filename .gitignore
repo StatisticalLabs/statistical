@@ -27,12 +27,22 @@ jspm_packages/
 .env.production.local
 .env.local
 
-# Next.js build output
-.next
-out
-
 # data
 data
 
 # Turborepo cache
 .turbo
+
+# Next.js build output
+.next
+out
+
+# Contentlayer build output
+.contentlayer
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
