@@ -5,7 +5,6 @@ import type { BotClient } from "@/structures/client";
 import {
   getPreviousUpdates,
   getYouTubeChannel,
-  trackers,
   youtubeChannels,
   type YouTubeChannel,
 } from "@/utils/db";
