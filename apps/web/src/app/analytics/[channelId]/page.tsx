@@ -60,35 +60,43 @@ export default async function Analytics({
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-1 rounded-lg border p-4">
-          <h1 className="text-center text-xl font-bold tracking-tight">
-            Subscribers
-          </h1>
-          <Chart
-            name={data.name}
-            data={data.previousUpdates.map(
-              (d: { timeHit: string; subscribers: number }) => [
-                new Date(d.timeHit).getTime(),
-                d.subscribers,
-              ],
-            )}
-          />
-        </div>
-        <div className="flex flex-col gap-1 rounded-lg border p-4">
-          <h1 className="text-center text-xl font-bold tracking-tight">
-            Subscribers/day
-          </h1>
-          <Chart
-            name={data.name}
-            data={data.previousUpdates.map(
-              (d: { timeHit: string; subscriberRate: number }) => [
-                new Date(d.timeHit).getTime(),
-                d.subscriberRate,
-              ],
-            )}
-            gains
-          />
-        </div>
+        {data.previousUpdates.length ? (
+          <>
+            <div className="flex flex-col gap-1 rounded-lg border p-4">
+              <h1 className="text-center text-xl font-bold tracking-tight">
+                Subscribers
+              </h1>
+              <Chart
+                name={data.name}
+                data={data.previousUpdates.map(
+                  (d: { timeHit: string; subscribers: number }) => [
+                    new Date(d.timeHit).getTime(),
+                    d.subscribers,
+                  ],
+                )}
+              />
+            </div>
+            <div className="flex flex-col gap-1 rounded-lg border p-4">
+              <h1 className="text-center text-xl font-bold tracking-tight">
+                Subscribers/day
+              </h1>
+              <Chart
+                name={data.name}
+                data={data.previousUpdates.map(
+                  (d: { timeHit: string; subscriberRate: number }) => [
+                    new Date(d.timeHit).getTime(),
+                    d.subscriberRate,
+                  ],
+                )}
+                gains
+              />
+            </div>
+          </>
+        ) : (
+          <p className="text-center">
+            This channel was just added. Check back in later to see some graphs!
+          </p>
+        )}
       </div>
     </section>
   );
