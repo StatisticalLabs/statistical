@@ -37,14 +37,14 @@ const DATA_DIRECTORY = "./data";
 async function checkIfDataExists() {
   if (!(await exists(DATA_DIRECTORY))) {
     console.log("No data directory found. Creating data directory...");
-    await mkdir("../../data");
+    await mkdir(DATA_DIRECTORY);
     console.log("Data directory created.");
   }
 
   if (!(await exists(`${DATA_DIRECTORY}/meta.json`))) {
     console.log("No meta.json found. Creating meta.json...");
     await writeFile(
-      "../../data/meta.json",
+      `${DATA_DIRECTORY}/meta.json`,
       JSON.stringify({
         youtubeChannels: [],
         trackers: [],
