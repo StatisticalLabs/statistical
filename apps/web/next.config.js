@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 
+const createJiti = require("jiti");
+const jiti = createJiti(__dirname);
+
+jiti("@statistical/env/web");
+
 const { createContentlayerPlugin } = require("next-contentlayer");
 
 /** @type {import('next').NextConfig} */
@@ -11,6 +16,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  transpilePackages: ["@statistical/env"],
 };
 
 const withContentlayer = createContentlayerPlugin({
