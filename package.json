@@ -11,7 +11,8 @@
     "build": "turbo build",
     "typecheck": "turbo typecheck",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "db:seed": "bun ./scripts/seed-database.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
