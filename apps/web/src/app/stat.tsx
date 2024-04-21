@@ -14,7 +14,7 @@ export function Stat({
   count?: number;
 }) {
   return (
-    <div className="flex w-[281px] items-center gap-4 rounded-lg border px-6 py-4">
+    <div className="flex w-[291px] items-center gap-4 rounded-lg border px-6 py-4">
       {Icon}
       <div className="flex-grow">
         {count ? (
