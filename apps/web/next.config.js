@@ -10,6 +10,14 @@ const { createContentlayerPlugin } = require("next-contentlayer");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  redirects: async () => [
+    {
+      source: "/invite",
+      destination:
+        "https://discord.com/oauth2/authorize?client_id=1226539048118649022",
+      permanent: false,
+    },
+  ],
   images: {
     remotePatterns: [
       {
