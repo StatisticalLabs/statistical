@@ -36,7 +36,7 @@ export async function generateMetadata({
     title: doc.title,
     description: doc.description,
     openGraph: {
-      siteName: "csmos",
+      siteName: "Statistical",
       title: doc.title,
       description: doc.description,
       type: "article",
