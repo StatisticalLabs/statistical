@@ -11,6 +11,7 @@ export interface YouTubeChannel {
   id: string;
   name: string;
   handle?: string;
+  avatar: string;
   lastUpdate?: Update;
   currentUpdate?: Update;
   trackers: string[];
@@ -107,6 +108,7 @@ async function getPreviousUpdates(channelId: string) {
 function subscribe(options: {
   name: string;
   handle?: string;
+  avatar: string;
   youtubeChannelId: string;
   channelId: string;
   userId: string;
@@ -123,6 +125,7 @@ function subscribe(options: {
       id: options.youtubeChannelId,
       name: options.name,
       handle: options.handle,
+      avatar: options.avatar,
       trackers: [id],
     });
   else youtubeChannels[channelIndex].trackers.push(id);

@@ -4,7 +4,7 @@ import { z } from "zod";
 export const botEnv = createEnv({
   server: {
     DISCORD_TOKEN: z.string(),
-    API_PORT: z.coerce.number().default(3000),
+    API_PORT: z.coerce.number().default(3001),
     NODE_ENV: z.enum(["development", "production"]).default("development"),
   },
   clientPrefix: undefined,

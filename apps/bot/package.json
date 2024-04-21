@@ -13,6 +13,7 @@
     "@napi-rs/canvas": "^0.1.51",
     "@paralleldrive/cuid2": "^2.2.2",
     "@statistical/config": "workspace:*",
+    "@statistical/env": "workspace:*",
     "chart.js": "^4.4.2",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^3.6.0",
@@ -21,7 +22,6 @@
     "hono": "^4.2.4"
   },
   "devDependencies": {
-    "@statistical/env": "workspace:*",
     "@statistical/tsconfig": "workspace:*",
     "@types/bun": "latest",
     "dotenv-cli": "^7.4.1",
