@@ -17,7 +17,7 @@ export const channelAutocomplete = async (
   }
 
   const res = await fetch(
-    `https://axern.space/api/search?platform=youtube&type=channel&query=${focusedValue}`,
+    `https://axern.space/api/search?platform=youtube&type=channel&query=${focusedValue.toLowerCase()}`,
   );
   const data: any = await res.json();
 
@@ -50,7 +50,7 @@ export const trackedChannelAutocomplete = async (
       value: channel.id,
     }));
   const filtered = channels.filter((channel) =>
-    channel.name.includes(focusedValue),
+    channel.name.toLowerCase().includes(focusedValue.toLowerCase()),
   );
   await interaction.respond(filtered);
 };
