@@ -10,12 +10,8 @@ interface Stats {
   totalSubscribers: number;
 }
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 export async function Stats() {
   unstable_noStore();
-
-  await sleep(3000);
 
   const res = await fetch(`${env.API_URL}/stats`);
   const stats: Stats = await res.json();
