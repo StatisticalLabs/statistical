@@ -3,6 +3,7 @@ import { unstable_noStore } from "next/cache";
 import { Skeleton } from "../components/ui/skeleton";
 import { webEnv as env } from "@statistical/env/web";
 import { Stat } from "./stat";
+import Link from "next/link";
 
 interface Stats {
   servers: number;
@@ -33,11 +34,13 @@ export async function Stats() {
           }
           count={stats.servers}
         />
-        <Stat
-          name="Channels tracked"
-          icon={<Tv className="h-10 w-10 text-gray-500 dark:text-gray-400" />}
-          count={stats.channelsTracked}
-        />
+        <Link href="/top">
+          <Stat
+            name="Channels tracked"
+            icon={<Tv className="h-10 w-10 text-gray-500 dark:text-gray-400" />}
+            count={stats.channelsTracked}
+          />
+        </Link>
         <Stat
           name="Total subscribers"
           icon={
@@ -63,10 +66,12 @@ export function StatsFallback() {
             <Server className="h-10 w-10 text-gray-500 dark:text-gray-400" />
           }
         />
-        <Stat
-          name="Channels tracked"
-          icon={<Tv className="h-10 w-10 text-gray-500 dark:text-gray-400" />}
-        />
+        <Link href="/top">
+          <Stat
+            name="Channels tracked"
+            icon={<Tv className="h-10 w-10 text-gray-500 dark:text-gray-400" />}
+          />
+        </Link>
         <Stat
           name="Total subscribers"
           icon={
