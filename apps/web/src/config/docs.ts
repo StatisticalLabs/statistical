@@ -20,7 +20,11 @@ export const docsConfig: DocsConfig = {
       items: [
         {
           title: "Start tracking",
-          href: "/docs/tracking",
+          href: "/docs/start-tracking",
+        },
+        {
+          title: "Stop tracking",
+          href: "/docs/stop-tracking",
         },
       ],
     },
