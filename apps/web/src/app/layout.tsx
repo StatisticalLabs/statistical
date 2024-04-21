@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import "../styles/globals.css";
 import { Navbar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/themes";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,6 +27,7 @@ export default function RootLayout({
           <div className="relative flex min-h-screen flex-col">
             <Navbar />
             <main className="flex-1">{children}</main>
+            <Footer />
           </div>
         </ThemeProvider>
       </body>

@@ -9,6 +9,7 @@ interface SiteConfig {
     name: string;
     href: string;
   };
+  copyright: string;
   navbarItems: ItemWithHref[];
 }
 
@@ -21,6 +22,7 @@ export const siteConfig: SiteConfig = {
     name: "MIT",
     href: "https://github.com/StatisticalLabs/statistical/blob/main/LICENSE",
   },
+  copyright: "Statistical Labs",
   navbarItems: [
     {
       title: "Docs",
