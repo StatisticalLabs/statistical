@@ -41,7 +41,7 @@ export default {
       channels = channels.filter((channel) => channel.value !== firstChannelId);
     }
     const filtered = channels.filter((channel) =>
-      channel.name.includes(focusedOption.value.toLowerCase()),
+      channel.name.toLowerCase().includes(focusedOption.value.toLowerCase()),
     );
     await interaction.respond(filtered);
   },
