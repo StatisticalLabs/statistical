@@ -5,8 +5,7 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/cn";
 import { usePathname } from "next/navigation";
-import { buttonVariants } from "./ui/button";
-import { Plus } from "lucide-react";
+import { ThemeToggle } from "./themes";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -43,7 +42,9 @@ export function Navbar() {
             ))}
           </div>
         </nav>
-        <div className="flex items-center gap-2"></div>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
