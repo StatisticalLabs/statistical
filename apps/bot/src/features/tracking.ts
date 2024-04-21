@@ -12,7 +12,7 @@ import { getChannels } from "@/utils/youtube";
 import { abbreviate } from "@/utils/abbreviate";
 import { cache } from "@/utils/cache";
 import { gain } from "@/utils/gain";
-import { readdir, mkdir, appendFile, exists } from "fs/promises";
+import { mkdir, appendFile, exists } from "fs/promises";
 import { DATA_DIRECTORY } from "@/constants";
 
 interface Message {
