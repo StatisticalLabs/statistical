@@ -61,11 +61,15 @@ const components = {
   }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
     const isExternal = href?.startsWith("http");
     const Component = isExternal ? "a" : Link;
+    const newClassName =
+      className !== "heading-link"
+        ? "font-medium underline underline-offset-4"
+        : "";
     return (
       <Component
         href={href as string}
         target={isExternal ? "_blank" : undefined}
-        className={cn("font-medium underline underline-offset-4", className)}
+        className={cn(newClassName, className)}
         {...props}
       />
     );

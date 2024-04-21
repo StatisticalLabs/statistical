@@ -37,9 +37,11 @@ export default makeSource({
       [
         rehypeAutolinkHeadings,
         {
+          behavior: "wrap",
           properties: {
-            className: ["anchor"],
-            ariaLabel: "Link to section",
+            ariaHidden: true,
+            tabIndex: -1,
+            class: "heading-link",
           },
         },
       ],

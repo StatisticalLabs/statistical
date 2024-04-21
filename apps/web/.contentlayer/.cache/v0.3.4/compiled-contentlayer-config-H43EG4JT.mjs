@@ -36,9 +36,11 @@ var contentlayer_config_default = makeSource({
       [
         rehypeAutolinkHeadings,
         {
+          behavior: "wrap",
           properties: {
-            className: ["anchor"],
-            ariaLabel: "Link to section"
+            ariaHidden: true,
+            tabIndex: -1,
+            class: "heading-link"
           }
         }
       ]
@@ -49,4 +51,4 @@ export {
   Doc,
   contentlayer_config_default as default
 };
-//# sourceMappingURL=compiled-contentlayer-config-BHS3S5RD.mjs.map
+//# sourceMappingURL=compiled-contentlayer-config-H43EG4JT.mjs.map
