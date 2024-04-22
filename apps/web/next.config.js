@@ -7,6 +7,7 @@ const jiti = createJiti(__dirname);
 jiti("@statistical/env/web");
 
 const { createContentlayerPlugin } = require("next-contentlayer");
+const createMDX = require("@next/mdx");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -35,10 +36,34 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   transpilePackages: ["@statistical/env"],
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 };
 
-const withContentlayer = createContentlayerPlugin({
-  // Additional Contentlayer config options
-});
+module.exports = async () => {
+  const rehypeSlug = (await import("rehype-slug")).default;
+  const rehypeAutolinkHeadings = (await import("rehype-autolink-headings"))
+    .default;
 
-module.exports = withContentlayer(nextConfig);
+  const withContentlayer = createContentlayerPlugin({});
+  const withMDX = createMDX({
+    options: {
+      rehypePlugins: [
+        rehypeSlug,
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: "wrap",
+            properties: {
+              ariaHidden: true,
+              tabIndex: -1,
+              class: "heading-link",
+            },
+          },
+        ],
+      ],
+    },
+  });
+
+  const withPlugins = (nextConfig) => withMDX(withContentlayer(nextConfig));
+  return withPlugins(nextConfig);
+};

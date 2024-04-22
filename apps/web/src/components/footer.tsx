@@ -1,22 +1,34 @@
 import { siteConfig } from "@/config/site";
 import { buttonVariants } from "./ui/button";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
   return (
     <footer className="sticky border-t border-border text-sm leading-6">
-      <div className="max-w-8xl container flex h-16 items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-foreground/80 lg:flex-1">
-          <a
-            href={siteConfig.license.href}
-            target="_blank"
-            className="underline underline-offset-4"
-          >
-            {siteConfig.license.name}
-          </a>
-          <p>
-            &copy; {new Date().getFullYear()} {siteConfig.copyright}
-          </p>
+      <div className="max-w-8xl container flex h-20 items-center justify-between gap-3">
+        <div className="flex flex-col gap-1 text-foreground/80 lg:flex-1">
+          <div className="flex items-center gap-2 lg:flex-1">
+            <a
+              href={siteConfig.license.href}
+              target="_blank"
+              className="underline underline-offset-4"
+            >
+              {siteConfig.license.name}
+            </a>
+            <p>
+              &copy; {new Date().getFullYear()} {siteConfig.copyright}
+            </p>
+          </div>
+          <div className="flex items-center gap-2 text-xs lg:flex-1">
+            <Link href="/terms" className="underline underline-offset-4">
+              Terms of Service
+            </Link>
+            •
+            <Link href="/privacy" className="underline underline-offset-4">
+              Privacy Policy
+            </Link>
+          </div>
         </div>
         <div className="flex items-center justify-end lg:flex-1">
           <a
