@@ -5,6 +5,7 @@
     "dev": "bun with-env next dev",
     "start": "bun with-env next start",
     "build": "next build",
+    "typecheck": "tsc --noEmit",
     "lint": "next lint",
     "with-env": "dotenv -e ../../.env --"
   },
@@ -46,6 +47,6 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5.4.5"
   }
 }
