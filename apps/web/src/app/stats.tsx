@@ -1,5 +1,4 @@
 import { LucideIcon, Server, Tv, Users } from "lucide-react";
-import { unstable_noStore } from "next/cache";
 import { webEnv as env } from "@statistical/env/web";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
