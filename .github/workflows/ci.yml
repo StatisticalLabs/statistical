@@ -21,6 +21,9 @@ jobs:
         uses: oven-sh/setup-bun@v1
       - name: Install packages
         run: bun install
+      - name: Build Contentlayer
+        working-directory: ./apps/web
+        run: bunx contentlayer build
       - name: Typecheck
         run: bun run typecheck
   lint:
