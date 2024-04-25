@@ -196,6 +196,10 @@ export default {
             .setCustomId(`graph-${channelId}:average`)
             .setLabel("Subscribers/day graph")
             .setStyle(ButtonStyle.Success),
+          new ButtonBuilder()
+            .setLabel("View analytics")
+            .setStyle(ButtonStyle.Link)
+            .setURL(`https://statistical.vercel.app/analytics/${channelId}`),
         ),
       ],
     });
