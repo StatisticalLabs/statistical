@@ -1,4 +1,4 @@
-import { botEnv as env } from "@statistical/env";
+import { botEnv as env } from "@statistical/env/bot";
 import type { Config } from "@statistical/config";
 
 export default {

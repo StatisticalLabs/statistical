@@ -8,7 +8,7 @@ import {
   youtubeChannels,
   type YouTubeChannel,
 } from "@/utils/db";
-import { botEnv as env } from "@statistical/env";
+import { botEnv as env } from "@statistical/env/bot";
 import { cache } from "@/utils/cache";
 import { getChannel, type YouTubeChannel as Channel } from "@/utils/youtube";
 

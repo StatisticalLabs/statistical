@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "module": "index.ts",
   "exports": {
-    ".": "./index.ts",
     "./bot": "./bot.ts",
     "./web": "./web.ts"
   },
