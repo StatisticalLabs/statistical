@@ -197,8 +197,8 @@ export default {
             .setLabel("Subscribers/day graph")
             .setStyle(ButtonStyle.Success),
           new ButtonBuilder()
-            .setLabel("View analytics")
             .setStyle(ButtonStyle.Link)
+            .setLabel("View analytics")
             .setURL(`https://statistical.vercel.app/analytics/${channelId}`),
         ),
       ],

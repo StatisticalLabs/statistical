@@ -44,7 +44,7 @@ function DocsSidebarItems({
             "rounded px-2 py-1 transition-colors",
             pathname === item.href
               ? "bg-muted font-medium text-foreground"
-              : "text-muted-foreground hover:bg-muted/70 hover:text-white",
+              : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
           )}
         >
           {item.title}
