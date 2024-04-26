@@ -184,101 +184,105 @@ export default async (client: BotClient<true>) => {
         const secondSubRate = message.subscriberRate * 1;
 
         if (discordChannel?.isTextBased()) {
-          const msg = await discordChannel.send({
-            content: message.pingRoleId
-              ? `<@&${message.pingRoleId}>`
-              : undefined,
-            embeds: [
-              new EmbedBuilder()
-                .setAuthor({
-                  name: `${message.name}${message.handle ? ` (${message.handle})` : ""}`,
-                  iconURL: message.avatar,
-                  url: `https://youtube.com/${message.handle ?? `channel/${message.youtubeChannelId}`}`,
-                })
-                .setTitle("New subscriber update")
-                .addFields([
-                  {
-                    name: "Old subcriber count",
-                    value: message.oldApiCount
-                      ? abbreviate(message.oldApiCount)
-                      : "None",
-                    inline: true,
-                  },
-                  {
-                    name: "New subscriber count",
-                    value: abbreviate(message.newApiCount),
-                    inline: true,
-                  },
-                  {
-                    name: `${abbreviate(
-                      message.oldApiCount ?? 0,
-                    )} milestone date`,
-                    value: message.lastUpdateTime
-                      ? time(message.lastUpdateTime, "F")
-                      : "None",
-                  },
-                  {
-                    name: `${abbreviate(message.newApiCount)} milestone date`,
-                    value: time(message.currentUpdateTime, "F"),
-                  },
-                  {
-                    name: "Time elapsed",
-                    value: convertToReadable(message.timeTook),
-                  },
-                  {
-                    name: `Subscribers/day ${
-                      dailySubRate.old !== 0
-                        ? dailySubRate.new - dailySubRate.old < 0
-                          ? "(⏬)"
-                          : dailySubRate.new - dailySubRate.old === 0
-                            ? ""
-                            : "(⏫)"
-                        : ""
-                    }`,
-                    value: `${gain(dailySubRate.new, true)} (${gain(dailySubRateDifference, true)})`,
-                    inline: true,
-                  },
-                  {
-                    name: "Subscribers/second",
-                    value: gain(secondSubRate),
-                    inline: true,
-                  },
-                ])
-                .setColor(
-                  message.newApiCount < (message.oldApiCount ?? 0)
-                    ? config.colors.danger
-                    : dailySubRate.new < dailySubRate.old
-                      ? config.colors.warning
-                      : config.colors.success,
-                )
-                .setImage(`attachment://${message.youtubeChannelId}.png`)
-                .setFooter({
-                  text: client.user.username,
-                  iconURL: client.user.displayAvatarURL(),
-                })
-                .setTimestamp(),
-            ],
-            components: [
-              new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder()
-                  .setCustomId(
-                    `image-${message.youtubeChannelId}:${message.currentUpdateTime.getTime()}:${message.timeTook}:${message.oldApiCount ?? 0}:${message.newApiCount}:${dailySubRate.new}`,
+          try {
+            const msg = await discordChannel.send({
+              content: message.pingRoleId
+                ? `<@&${message.pingRoleId}>`
+                : undefined,
+              embeds: [
+                new EmbedBuilder()
+                  .setAuthor({
+                    name: `${message.name}${message.handle ? ` (${message.handle})` : ""}`,
+                    iconURL: message.avatar,
+                    url: `https://youtube.com/${message.handle ?? `channel/${message.youtubeChannelId}`}`,
+                  })
+                  .setTitle("New subscriber update")
+                  .addFields([
+                    {
+                      name: "Old subcriber count",
+                      value: message.oldApiCount
+                        ? abbreviate(message.oldApiCount)
+                        : "None",
+                      inline: true,
+                    },
+                    {
+                      name: "New subscriber count",
+                      value: abbreviate(message.newApiCount),
+                      inline: true,
+                    },
+                    {
+                      name: `${abbreviate(
+                        message.oldApiCount ?? 0,
+                      )} milestone date`,
+                      value: message.lastUpdateTime
+                        ? time(message.lastUpdateTime, "F")
+                        : "None",
+                    },
+                    {
+                      name: `${abbreviate(message.newApiCount)} milestone date`,
+                      value: time(message.currentUpdateTime, "F"),
+                    },
+                    {
+                      name: "Time elapsed",
+                      value: convertToReadable(message.timeTook),
+                    },
+                    {
+                      name: `Subscribers/day ${
+                        dailySubRate.old !== 0
+                          ? dailySubRate.new - dailySubRate.old < 0
+                            ? "(⏬)"
+                            : dailySubRate.new - dailySubRate.old === 0
+                              ? ""
+                              : "(⏫)"
+                          : ""
+                      }`,
+                      value: `${gain(dailySubRate.new, true)} (${gain(dailySubRateDifference, true)})`,
+                      inline: true,
+                    },
+                    {
+                      name: "Subscribers/second",
+                      value: gain(secondSubRate),
+                      inline: true,
+                    },
+                  ])
+                  .setColor(
+                    message.newApiCount < (message.oldApiCount ?? 0)
+                      ? config.colors.danger
+                      : dailySubRate.new < dailySubRate.old
+                        ? config.colors.warning
+                        : config.colors.success,
                   )
-                  .setLabel("Generate image")
-                  .setStyle(ButtonStyle.Secondary),
-                new ButtonBuilder()
-                  .setCustomId(`graph-${message.youtubeChannelId}`)
-                  .setLabel("View growth graphs")
-                  .setStyle(ButtonStyle.Success),
-                new ButtonBuilder()
-                  .setCustomId(`untrack-${message.youtubeChannelId}`)
-                  .setLabel("Stop tracking this channel")
-                  .setStyle(ButtonStyle.Danger),
-              ),
-            ],
-          });
+                  .setImage(`attachment://${message.youtubeChannelId}.png`)
+                  .setFooter({
+                    text: client.user.username,
+                    iconURL: client.user.displayAvatarURL(),
+                  })
+                  .setTimestamp(),
+              ],
+              components: [
+                new ActionRowBuilder<ButtonBuilder>().addComponents(
+                  new ButtonBuilder()
+                    .setCustomId(
+                      `image-${message.youtubeChannelId}:${message.currentUpdateTime.getTime()}:${message.timeTook}:${message.oldApiCount ?? 0}:${message.newApiCount}:${dailySubRate.new}`,
+                    )
+                    .setLabel("Generate image")
+                    .setStyle(ButtonStyle.Secondary),
+                  new ButtonBuilder()
+                    .setCustomId(`graph-${message.youtubeChannelId}`)
+                    .setLabel("View growth graphs")
+                    .setStyle(ButtonStyle.Success),
+                  new ButtonBuilder()
+                    .setCustomId(`untrack-${message.youtubeChannelId}`)
+                    .setLabel("Stop tracking this channel")
+                    .setStyle(ButtonStyle.Danger),
+                ),
+              ],
+            });
 
-          if (msg.crosspostable) await msg.crosspost();
+            if (msg.crosspostable) await msg.crosspost();
+          } catch (err) {
+            console.error(err);
+          }
         }
 
         messagesQueue.delete(message);
