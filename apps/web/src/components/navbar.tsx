@@ -9,6 +9,7 @@ import { ThemeToggle } from "./themes";
 import { buttonVariants } from "./ui/button";
 import { Plus } from "lucide-react";
 import { MobileDropdown } from "./mobile-nav";
+import { Search } from "./search";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -46,6 +47,7 @@ export function Navbar() {
           </div>
         </nav>
         <div className="flex items-center gap-2">
+          <Search />
           <div className="hidden md:flex md:items-center">
             <a
               href={siteConfig.links.github}

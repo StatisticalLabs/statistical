@@ -1,11 +1,14 @@
+import "@docsearch/css";
+import "../styles/globals.css";
+
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import "../styles/globals.css";
 import { Navbar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/themes";
 import Footer from "@/components/footer";
 import { cn } from "@/lib/cn";
+import ReactDOM from "react-dom";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://statistical.vercel.app"),
@@ -45,6 +48,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  ReactDOM.preconnect("https://8F8XSOV9N0-dsn.algolia.net", {
+    crossOrigin: "",
+  });
+
   return (
     <html lang="en" className={cn(GeistSans.variable, GeistMono.variable)}>
       <body>

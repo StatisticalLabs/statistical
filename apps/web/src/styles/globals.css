@@ -75,6 +75,36 @@
   }
 }
 
+:root {
+  --docsearch-container-background: rgba(0, 0, 0, 0.8);
+  --docsearch-modal-background: hsl(var(--background));
+  --docsearch-footer-background: hsl(var(--background));
+  --docsearch-modal-shadow: none;
+  --docsearch-footer-shadow: none;
+  --docsearch-searchbox-focus-background: none;
+  --docsearch-primary-color: hsl(var(--primary));
+  --docsearch-text-color: hsl(var(--foreground));
+  --docsearch-hit-shadow: none;
+  --docsearch-hit-color: hsl(var(--muted-foreground));
+  --docsearch-muted-color: hsl(var(--muted-foreground));
+}
+
+.DocSearch-Modal {
+  @apply border;
+}
+
+.DocSearch-Footer {
+  @apply border-t;
+}
+
+.DocSearch-Hit:not([aria-selected="true"]) a {
+  @apply dark:bg-background;
+}
+
+.DocSearch-Hit[aria-selected="true"] a:is(.dark *) {
+  --docsearch-hit-active-color: black;
+}
+
 .heading-link::after {
   content: "#";
   font-weight: 500;
