@@ -2,7 +2,6 @@ import { z } from "zod";
 import type { ColorResolvable } from "discord.js";
 
 export const configSchema = z.object({
-  guildId: z.string().optional(),
   trackDelay: z.number().default(5_000),
   colors: z.object({
     primary: z.string(),
