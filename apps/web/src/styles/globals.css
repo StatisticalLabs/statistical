@@ -105,6 +105,18 @@
   --docsearch-hit-active-color: black;
 }
 
+.DocSearch-ErrorScreen,
+.DocSearch-NoResults,
+.DocSearch-StartScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.DocSearch-NoResults-Prefill-List {
+  text-align: center;
+}
+
 .heading-link::after {
   content: "#";
   font-weight: 500;
