@@ -1,0 +1,29 @@
+---
+title: Permissions
+---
+
+When you add Statistical to your Discord server, it requests the following permissions:
+
+![Statistical requesting permissions for a server named "The Statistical Laboratory"](/docs/permissions.png)
+
+But why do we need these permissions?
+
+## Send Messages
+
+This is needed to send update messages in the channel you've used to track a YouTube channel.
+
+## Embed Links and Attach Files
+
+This is needed to send the update embed whenever a channel recieves a subscriber update.
+
+![An example update](/update.png)
+
+`Attach Files` is also needed to send images of graphs when clicking on the `View growth graphs` button or by running `/channel`.
+
+![An example graph for MrBeast](/docs/graph.png)
+
+## Mention @everyone, @here, and All Roles
+
+This is needed for when `ping_role` is specified when tracking a channel. Learn more about the `ping_role` option in the [tracking documentation](/docs/start-tracking#ping-role).
+
+If you don't plan on using `ping_role`, you can disable the permission. You can always enable it later if you need to.

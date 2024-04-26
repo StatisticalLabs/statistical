@@ -13,6 +13,10 @@ export const docsConfig: DocsConfig = {
           title: "Introduction",
           href: "/docs",
         },
+        {
+          title: "Permissions",
+          href: "/docs/permissions",
+        },
       ],
     },
     {

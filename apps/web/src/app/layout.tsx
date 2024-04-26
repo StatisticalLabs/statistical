@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "../styles/globals.css";
 import { Navbar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/themes";
 import Footer from "@/components/footer";
+import { cn } from "@/lib/cn";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://statistical.vercel.app"),
@@ -44,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={GeistSans.variable}>
+    <html lang="en" className={cn(GeistSans.variable, GeistMono.variable)}>
       <body>
         <ThemeProvider
           attribute="class"

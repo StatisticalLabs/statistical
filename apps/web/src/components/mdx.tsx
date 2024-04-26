@@ -97,6 +97,15 @@ export const components = {
   li: ({ className, ...props }: React.HTMLAttributes<HTMLLIElement>) => (
     <li className={cn("mt-2", className)} {...props} />
   ),
+  code: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
+    <code
+      className={cn(
+        "relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold",
+        className,
+      )}
+      {...props}
+    />
+  ),
   Step: ({ className, ...props }: React.ComponentProps<"h3">) => (
     <h3
       className={cn(
