@@ -8,7 +8,6 @@ import { botEnv as env } from "@statistical/env/bot";
 import { readdir } from "fs/promises";
 import path from "path";
 import type { Command } from "./command";
-import config from "config";
 
 const join = (...paths: string[]) => path.join(import.meta.dir, ...paths);
 
