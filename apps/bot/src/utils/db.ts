@@ -188,16 +188,16 @@ function subscribe(options: {
   });
 }
 
-function unsubscribe(options: {
-  youtubeChannelId: string;
-  channelId?: string;
-  userId: string;
-}) {
+function unsubscribe(
+  options: {
+    youtubeChannelId: string;
+  } & ({ channelId: string } | { userId: string }),
+) {
   if (
     !isTracking(
       options.youtubeChannelId,
-      options.channelId ?? options.userId,
-      !options.channelId,
+      "channelId" in options ? options.channelId : options.userId,
+      !("channelId" in options),
     )
   )
     return false;
@@ -206,8 +206,8 @@ function unsubscribe(options: {
   if (index === -1) return false;
   const tracker = findTracker(
     options.youtubeChannelId,
-    options.channelId ?? options.userId,
-    !options.channelId,
+    "channelId" in options ? options.channelId : options.userId,
+    !("channelId" in options),
   );
   if (!tracker?.id) return false;
   const trackerInChannelIndex = youtubeChannels[index].trackers.findIndex(
