@@ -27,7 +27,7 @@ export interface Update {
 export interface Tracker {
   id: string;
   youtubeChannelId: string;
-  channelId: string;
+  channelId?: string;
   guildId: string;
   userId: string;
   subscribedAt: string;
@@ -66,17 +66,37 @@ const getYouTubeChannel = (id: string) =>
 const getYouTubeChannelIndex = (id: string) =>
   youtubeChannels.findIndex((record) => record.id === id);
 
-const isTracking = (youtubeChannelId: string, channelId: string) =>
+const isTracking = (
+  youtubeChannelId: string,
+  channelOrUserId: string,
+  user: boolean = false,
+) =>
   trackers?.findIndex(
     (record) =>
-      record?.channelId === channelId &&
+      (user
+        ? record.userId === channelOrUserId
+        : record?.channelId === channelOrUserId) &&
       record?.youtubeChannelId === youtubeChannelId,
   ) !== -1;
 
-function findTracker(youtubeChannelId: string, channelId: string) {
+const isTrackingAny = (channelOrUserId: string, user: boolean = false) =>
+  trackers?.findIndex(
+    (record) =>
+      (user
+        ? record.userId === channelOrUserId
+        : record?.channelId === channelOrUserId) && record?.youtubeChannelId,
+  ) !== -1;
+
+function findTracker(
+  youtubeChannelId: string,
+  channelOrUserId: string,
+  user: boolean = false,
+) {
   return trackers.find(
     (record) =>
-      record.channelId === channelId &&
+      (user
+        ? record.userId === channelOrUserId
+        : record?.channelId === channelOrUserId) &&
       record.youtubeChannelId === youtubeChannelId,
   );
 }
@@ -130,12 +150,19 @@ function subscribe(options: {
   handle?: string;
   avatar: string;
   youtubeChannelId: string;
-  channelId: string;
+  channelId?: string;
   userId: string;
   guildId: string;
   pingRoleId?: string;
 }) {
-  if (isTracking(options.youtubeChannelId, options.channelId)) return false;
+  if (
+    isTracking(
+      options.youtubeChannelId,
+      options.channelId ?? options.userId,
+      !options.channelId,
+    )
+  )
+    return false;
 
   const id = createId();
 
@@ -161,14 +188,27 @@ function subscribe(options: {
   });
 }
 
-function unsubscribe(options: { youtubeChannelId: string; channelId: string }) {
-  // dont check for channel because sometimes people try to untrack banned / terminated channels which the ytAPI doesnt show.
-  if (isTracking(options.youtubeChannelId, options.channelId) == false)
+function unsubscribe(options: {
+  youtubeChannelId: string;
+  channelId?: string;
+  userId: string;
+}) {
+  if (
+    !isTracking(
+      options.youtubeChannelId,
+      options.channelId ?? options.userId,
+      !options.channelId,
+    )
+  )
     return false;
 
   const index = getYouTubeChannelIndex(options.youtubeChannelId);
   if (index === -1) return false;
-  const tracker = findTracker(options.youtubeChannelId, options.channelId);
+  const tracker = findTracker(
+    options.youtubeChannelId,
+    options.channelId ?? options.userId,
+    !options.channelId,
+  );
   if (!tracker?.id) return false;
   const trackerInChannelIndex = youtubeChannels[index].trackers.findIndex(
     (record) => record == tracker.id,
@@ -178,6 +218,23 @@ function unsubscribe(options: { youtubeChannelId: string; channelId: string }) {
     // remove the subscription
     youtubeChannels[index].trackers.splice(trackerInChannelIndex, 1);
   if (trackerIndex != -1) trackers.splice(trackerIndex, 1);
+  return true;
+}
+
+function unsubscribeAll(channelOrUserId: string, user: boolean = false) {
+  const allTrackers = trackers.filter((record) =>
+    user
+      ? record.userId === channelOrUserId
+      : record.channelId === channelOrUserId,
+  );
+  if (!allTrackers.length) return false;
+  for (const tracker of allTrackers) {
+    unsubscribe({
+      youtubeChannelId: tracker.youtubeChannelId,
+      channelId: tracker.channelId,
+      userId: tracker.userId,
+    });
+  }
   return true;
 }
 
@@ -220,6 +277,8 @@ export {
   getYouTubeChannelIndex,
   getPreviousUpdates,
   isTracking,
+  isTrackingAny,
   subscribe,
   unsubscribe,
+  unsubscribeAll,
 };
