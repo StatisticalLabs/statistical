@@ -1,3 +1,5 @@
+import { botEnv } from "@statistical/env/bot";
+
 interface Channel {
   id: string;
   name: string;
@@ -13,7 +15,9 @@ export type { Channel as YouTubeChannel };
 
 export async function getChannel(id: string) {
   const res = await fetch(
-    `https://yt.lemnoslife.com/noKey/channels?id=${id}&part=snippet,statistics`,
+    botEnv.YOUTUBE_API_KEY
+      ? `https://www.googleapis.com/youtube/v3/channels?id=${id}&part=snippet,statistics&key=${botEnv.YOUTUBE_API_KEY}`
+      : `https://yt.lemnoslife.com/noKey/channels?id=${id}&part=snippet,statistics`,
   );
   if (!res.ok) throw new Error("An error occured while fetching " + id);
   const data: any = await res.json();
@@ -23,7 +27,9 @@ export async function getChannel(id: string) {
 
 export async function getChannels(ids: string[]): Promise<Channel[]> {
   const res = await fetch(
-    `https://yt.lemnoslife.com/noKey/channels?id=${ids.join(",")}&part=snippet,statistics`,
+    botEnv.YOUTUBE_API_KEY
+      ? `https://www.googleapis.com/youtube/v3/channels?id=${ids.join(",")}&part=snippet,statistics&key=${botEnv.YOUTUBE_API_KEY}`
+      : `https://yt.lemnoslife.com/noKey/channels?id=${ids.join(",")}&part=snippet,statistics`,
   );
   if (!res.ok)
     throw new Error(
