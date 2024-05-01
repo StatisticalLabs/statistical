@@ -124,12 +124,12 @@ async function checkForUpdates(client: BotClient<true>) {
 
           await appendFile(
             `${DATA_DIRECTORY}/history/${channel.id}.csv`,
-            `\n${currentDate.toISOString()},${channel.subscribers},${subscriberRate * (60 * 60 * 24)}`
+            `\n${currentDate.toISOString()},${channel.subscribers},${subscriberRate * (60 * 60 * 24)}`,
           );
 
           for (const trackerId of dbChannel.trackers) {
             const trackerData = trackers.find(
-              (tracker) => tracker.id === trackerId
+              (tracker) => tracker.id === trackerId,
             );
             if (!trackerData) continue;
 
@@ -223,7 +223,7 @@ export default async (client: BotClient<true>) => {
                       },
                       {
                         name: `${abbreviate(
-                          message.oldApiCount ?? 0
+                          message.oldApiCount ?? 0,
                         )} milestone date`,
                         value: message.lastUpdateTime
                           ? time(message.lastUpdateTime, "F")
@@ -261,7 +261,7 @@ export default async (client: BotClient<true>) => {
                         ? config.colors.danger
                         : dailySubRate.new < dailySubRate.old
                           ? config.colors.warning
-                          : config.colors.success
+                          : config.colors.success,
                     )
                     .setImage(`attachment://${message.youtubeChannelId}.png`)
                     .setFooter({
@@ -274,7 +274,7 @@ export default async (client: BotClient<true>) => {
                   new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder()
                       .setCustomId(
-                        `image-${message.youtubeChannelId}:${message.currentUpdateTime.getTime()}:${message.timeTook}:${message.oldApiCount ?? 0}:${message.newApiCount}:${dailySubRate.new}`
+                        `image-${message.youtubeChannelId}:${message.currentUpdateTime.getTime()}:${message.timeTook}:${message.oldApiCount ?? 0}:${message.newApiCount}:${dailySubRate.new}`,
                       )
                       .setLabel("Generate image")
                       .setStyle(ButtonStyle.Secondary),
@@ -285,7 +285,7 @@ export default async (client: BotClient<true>) => {
                     new ButtonBuilder()
                       .setCustomId(`untrack-${message.youtubeChannelId}`)
                       .setLabel("Stop tracking this channel")
-                      .setStyle(ButtonStyle.Danger)
+                      .setStyle(ButtonStyle.Danger),
                   ),
                 ],
               });
@@ -310,10 +310,10 @@ export default async (client: BotClient<true>) => {
 
             const displayName = member.displayName.replace(
               /\s+\[\d+(\.\d+)?[KkMmBbTt]?\]$/,
-              ""
+              "",
             );
             await member.setNickname(
-              `${displayName} [${abbreviate(message.newApiCount)}]`
+              `${displayName} [${abbreviate(message.newApiCount)}]`,
             );
           }
         } catch (err) {
@@ -337,7 +337,7 @@ export default async (client: BotClient<true>) => {
       console.log(
         "Tracking was locked for " +
           Math.floor(performance.now() - lastTrackTime) +
-          "ms, so we forced it to work again."
+          "ms, so we forced it to work again.",
       );
     }
     if (
@@ -348,7 +348,7 @@ export default async (client: BotClient<true>) => {
       console.log(
         "Message sending was locked for " +
           Math.floor(performance.now() - lastTrackTime) +
-          "ms, so we forced it to work again."
+          "ms, so we forced it to work again.",
       );
     }
   }, 10000);
