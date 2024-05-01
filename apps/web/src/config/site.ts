@@ -22,7 +22,7 @@ export const siteConfig: SiteConfig = {
     name: "MIT",
     href: "https://github.com/StatisticalLabs/statistical/blob/main/LICENSE",
   },
-  copyright: "Statistical Labs",
+  copyright: "Statistical Labs, a subsidiary of Graphify Studios",
   navbarItems: [
     {
       title: "Docs",
