@@ -1,3 +1,11 @@
+import { DATA_DIRECTORY } from "@/constants";
+import type { BotClient } from "@/structures/client";
+import { abbreviate } from "@/utils/abbreviate";
+import { cache } from "@/utils/cache";
+import { trackers, youtubeChannels } from "@/utils/db";
+import { gain } from "@/utils/gain";
+import { getChannels } from "@/utils/youtube";
+import config from "config";
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -5,15 +13,7 @@ import {
   EmbedBuilder,
   time,
 } from "discord.js";
-import config from "config";
-import type { BotClient } from "@/structures/client";
-import { trackers, youtubeChannels } from "@/utils/db";
-import { getChannels } from "@/utils/youtube";
-import { abbreviate } from "@/utils/abbreviate";
-import { cache } from "@/utils/cache";
-import { gain } from "@/utils/gain";
-import { mkdir, appendFile, exists } from "fs/promises";
-import { DATA_DIRECTORY } from "@/constants";
+import { appendFile, exists, mkdir } from "fs/promises";
 
 interface Update {
   pingRoleId?: string;
@@ -124,12 +124,12 @@ async function checkForUpdates(client: BotClient<true>) {
 
           await appendFile(
             `${DATA_DIRECTORY}/history/${channel.id}.csv`,
-            `\n${currentDate.toISOString()},${channel.subscribers},${subscriberRate * (60 * 60 * 24)}`,
+            `\n${currentDate.toISOString()},${channel.subscribers},${subscriberRate * (60 * 60 * 24)}`
           );
 
           for (const trackerId of dbChannel.trackers) {
             const trackerData = trackers.find(
-              (tracker) => tracker.id === trackerId,
+              (tracker) => tracker.id === trackerId
             );
             if (!trackerData) continue;
 
@@ -183,19 +183,19 @@ export default async (client: BotClient<true>) => {
     updateSendingPossible = false;
     try {
       for await (const message of updatesQueue) {
-        if (message.channelId) {
-          await client.channels.fetch(message.channelId);
-          const discordChannel = client.channels.cache.get(message.channelId);
+        try {
+          if (message.channelId) {
+            await client.channels.fetch(message.channelId);
+            const discordChannel = client.channels.cache.get(message.channelId);
 
-          const dailySubRate = {
-            old: (message.lastSubscriberRate || 0) * (60 * 60 * 24),
-            new: message.subscriberRate * (60 * 60 * 24),
-          };
-          const dailySubRateDifference = dailySubRate.new - dailySubRate.old;
-          const secondSubRate = message.subscriberRate * 1;
+            const dailySubRate = {
+              old: (message.lastSubscriberRate || 0) * (60 * 60 * 24),
+              new: message.subscriberRate * (60 * 60 * 24),
+            };
+            const dailySubRateDifference = dailySubRate.new - dailySubRate.old;
+            const secondSubRate = message.subscriberRate * 1;
 
-          if (discordChannel?.isTextBased()) {
-            try {
+            if (discordChannel?.isTextBased()) {
               const msg = await discordChannel.send({
                 content: message.pingRoleId
                   ? `<@&${message.pingRoleId}>`
@@ -223,7 +223,7 @@ export default async (client: BotClient<true>) => {
                       },
                       {
                         name: `${abbreviate(
-                          message.oldApiCount ?? 0,
+                          message.oldApiCount ?? 0
                         )} milestone date`,
                         value: message.lastUpdateTime
                           ? time(message.lastUpdateTime, "F")
@@ -261,7 +261,7 @@ export default async (client: BotClient<true>) => {
                         ? config.colors.danger
                         : dailySubRate.new < dailySubRate.old
                           ? config.colors.warning
-                          : config.colors.success,
+                          : config.colors.success
                     )
                     .setImage(`attachment://${message.youtubeChannelId}.png`)
                     .setFooter({
@@ -274,7 +274,7 @@ export default async (client: BotClient<true>) => {
                   new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder()
                       .setCustomId(
-                        `image-${message.youtubeChannelId}:${message.currentUpdateTime.getTime()}:${message.timeTook}:${message.oldApiCount ?? 0}:${message.newApiCount}:${dailySubRate.new}`,
+                        `image-${message.youtubeChannelId}:${message.currentUpdateTime.getTime()}:${message.timeTook}:${message.oldApiCount ?? 0}:${message.newApiCount}:${dailySubRate.new}`
                       )
                       .setLabel("Generate image")
                       .setStyle(ButtonStyle.Secondary),
@@ -285,46 +285,42 @@ export default async (client: BotClient<true>) => {
                     new ButtonBuilder()
                       .setCustomId(`untrack-${message.youtubeChannelId}`)
                       .setLabel("Stop tracking this channel")
-                      .setStyle(ButtonStyle.Danger),
+                      .setStyle(ButtonStyle.Danger)
                   ),
                 ],
               });
 
               if (msg.crosspostable) await msg.crosspost();
-            } catch (err) {
-              console.error(err);
             }
-          }
-        } else {
-          await client.guilds.fetch(message.guildId);
+          } else {
+            await client.guilds.fetch(message.guildId);
 
-          const guild = client.guilds.cache.get(message.guildId);
-          if (!guild) {
-            updatesQueue.delete(message);
-            continue;
-          }
+            const guild = client.guilds.cache.get(message.guildId);
+            if (!guild) {
+              updatesQueue.delete(message);
+              continue;
+            }
 
-          await guild.members.fetch({ user: message.userId });
-          const member = guild.members.cache.get(message.userId);
-          if (!member) {
-            updatesQueue.delete(message);
-            continue;
-          }
+            await guild.members.fetch({ user: message.userId });
+            const member = guild.members.cache.get(message.userId);
+            if (!member) {
+              updatesQueue.delete(message);
+              continue;
+            }
 
-          try {
             const displayName = member.displayName.replace(
               /\s+\[\d+(\.\d+)?[KkMmBbTt]?\]$/,
-              "",
+              ""
             );
             await member.setNickname(
-              `${displayName} [${abbreviate(message.newApiCount)}]`,
+              `${displayName} [${abbreviate(message.newApiCount)}]`
             );
-          } catch (err) {
-            console.error(err);
           }
+        } catch (err) {
+          console.error(err);
+        } finally {
+          updatesQueue.delete(message);
         }
-
-        updatesQueue.delete(message);
       }
     } catch (err) {
       console.error(err);
@@ -341,7 +337,7 @@ export default async (client: BotClient<true>) => {
       console.log(
         "Tracking was locked for " +
           Math.floor(performance.now() - lastTrackTime) +
-          "ms, so we forced it to work again.",
+          "ms, so we forced it to work again."
       );
     }
     if (
@@ -352,7 +348,7 @@ export default async (client: BotClient<true>) => {
       console.log(
         "Message sending was locked for " +
           Math.floor(performance.now() - lastTrackTime) +
-          "ms, so we forced it to work again.",
+          "ms, so we forced it to work again."
       );
     }
   }, 10000);
